@@ -32,4 +32,6 @@ create table purchases (
     customer_id integer references customers(id),
     location_id integer references locations(id),
     purchase_date date
+
 );
+

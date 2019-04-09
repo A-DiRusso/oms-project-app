@@ -23,4 +23,6 @@ VALUES
 insert into purchases
 (item_id, customer_id, location_id, purchase_date)
 VALUES
+
 (1, 1, 1, '2019-04-09');
+
