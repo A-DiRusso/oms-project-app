@@ -4,6 +4,7 @@ const express = require('express');
 const PORT =process.env.PORT;
 const app = express();
 
+app.use(express.urlencoded({ extended: false}));
 const es6Renderer = require('express-es6-template-engine');
 app.engine('html', es6Renderer);
 app.set('views','./views');

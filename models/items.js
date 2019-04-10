@@ -41,6 +41,27 @@ class Item {
 
 
     }
+
+    static getByName(name) {
+        return db.one(`
+        Select * from items
+        where name ilike '${name}'
+        `)
+        .then(item => {
+            const itemInstance = new Item(item.id,
+                item.name,
+                item.sku,
+                item.lead_time,
+                item.wholesale,
+                item.retail,
+                item.stock,
+                item.location_id
+
+            )
+            return itemInstance;
+        })
+    }
+
 }
 
 module.exports = Item;
