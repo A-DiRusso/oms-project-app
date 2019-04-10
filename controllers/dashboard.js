@@ -35,9 +35,11 @@ async function showDashboard(req, res) {
         </div>
         `
        });
-       const itemChoices = allItems.map(item => {
+       const allItemsNoSpaces = allItems.map(item => item.name.replace(/ /g, '-'));
+
+       const itemChoices = allItemsNoSpaces.map(item => {
          return `
-          <option name=${item.name} value=${item.name}>${item.name}</option>
+          <option name=${item} value=${item}>${item.replace(/-/g, ' ')}</option>
 
          `
        });
@@ -62,14 +64,14 @@ async function simulatePurchase(req, res) {
  // 1. needs to deduct x amount of stock from whatever item was just purchased
   let i = 0;
   console.log(req.body);
-  const itemName = req.body.itemSelect;
+  const itemName = req.body.itemSelect.replace(/-/g, ' ');
   const itemInstance = await Item.getByName(itemName);
-  while(i < req.body.customerCount) {
-  const itemID = itemInstance.id;
+  while (i < req.body.customerCount) {
+    const itemID = itemInstance.id;
 
-  await Item.adjustStock(-1, itemID);
+    await Item.adjustStock(-1, itemID);
 
-  const date = '2019-04-10';
+    const date = '2019-04-10';
 
   
   // 2. needs to create a record of the purchase in purchases table
