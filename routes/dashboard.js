@@ -3,7 +3,8 @@ const express = require('express');
 const dashboardRouter =  express.Router();
 const {
     showDashboard,
-    simulatePurchase
+    simulatePurchase,
+    redirectToDashboard
 } = require('../controllers/dashboard');
 
 dashboardRouter.get('/', showDashboard);
