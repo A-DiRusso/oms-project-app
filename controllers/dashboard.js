@@ -62,43 +62,79 @@ async function showDashboard(req, res) {
 async function simulatePurchase(req, res) {
 
  // 1. needs to deduct x amount of stock from whatever item was just purchased
-  let i = 0;
   console.log(req.body);
+
+  // number of days to simulate, as entered by user
+  const numOfDays = req.body.numOfDays;
+  console.log(`------------------------------`);
+  console.log(numOfDays);
+  console.log(`------------------------------`);
   
   const itemName = req.body.itemSelect.replace(/-/g, ' ');
   if (req.body.itemSelect === "random") {
-    //find length of allItmes array - getAllItems
+    
     const allItems = await Item.getAll();
     const numberOfItems = allItems.length;
-    while (i < req.body.customerCount) {
-      const randomItem = allItems[Math.floor(numberOfItems * Math.random())];
-      const randomItemName = randomItem.name;
-      const itemInstance = await Item.getByName(randomItemName);
-      const itemID = itemInstance.id;
-  
-      await Item.adjustStock(-1, itemID);
-  
-      const date = '2019-04-10';
-      await Purchase.newPurchase(itemID, 2, 1, date);
-      i++;
+
+    let day = 0;
+
+    // keep loop going for each day
+    while (day < numOfDays) {
+
+
+      let customerCounter = 0;
+      // while customers coming in is still less than user entered total customers per day
+      while (customerCounter < req.body.customerCount) {
+        const randomItem = allItems[Math.floor(numberOfItems * Math.random())];
+        console.log(`Random item is ${randomItem.name}`);
+        const randomItemName = randomItem.name;
+        const itemInstance = await Item.getByName(randomItemName);
+        const itemID = itemInstance.id;
+        console.log(`ItemID is ${itemID}`);
+    
+        await Item.adjustStock(-1, itemID);
+    
+        const date = '2019-04-10';
+        await Purchase.newPurchase(itemID, 2, 1, date);
+        customerCounter++;
+      }
+
+      console.log(`Next day`);
+      day++;
+
     }
+    //find length of allItmes array - getAllItems
     //run while loop replacing itemid with random less than allItemsArray.length
 
   } else  {
     //specific/normal operation 
     const itemInstance = await Item.getByName(itemName);
-    while (i < req.body.customerCount) {
-      const itemID = itemInstance.id;
-  
-      await Item.adjustStock(-1, itemID);
-  
-      const date = '2019-04-10';
-  
+
+    let day = 0;
+
+    // keep loop going for each day
+    while (day < numOfDays) {
+
+      let customerCounter = 0;
+
+      // while customers coming in is still less than user entered total customers per day
+      
+      while (customerCounter < req.body.customerCount) {
+        const itemID = itemInstance.id;
     
-    // 2. needs to create a record of the purchase in purchases table
+        await Item.adjustStock(-1, itemID);
     
-    await Purchase.newPurchase(itemID, 2, 1, date);
-    i++;
+        const date = '2019-04-10';
+    
+      
+      // 2. needs to create a record of the purchase in purchases table
+      
+        await Purchase.newPurchase(itemID, 2, 1, date);
+        customerCounter++;
+      }
+
+      day++;
+
     }
   }
  

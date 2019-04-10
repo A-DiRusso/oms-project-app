@@ -8,7 +8,6 @@ const Items = require('../models/items');
 describe('item model', () => {
     it('should retrive all items', async () => {
         const allItems = await Items.getAll();
-        console.log(allItems);
         expect(allItems).to.be.an.instanceOf(Array);
     });
 });
