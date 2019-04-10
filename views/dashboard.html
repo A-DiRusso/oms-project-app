@@ -36,7 +36,10 @@
         Retail
       </div>
       <div class="col-sm border bg-secondary">
-        Stock
+        Original Stock
+      </div>
+      <div class="col-sm border bg-secondary">
+        Simulated Stock
       </div>
       <div class="col-sm border bg-secondary">
         Location_id
@@ -51,12 +54,13 @@
     <form action="/buy" method="POST">
       <label id="purchased_item" class="sr-only">Simulate Purchase</label>
     
-      <input type="number" name="customerCount">
+      <input type="number" name="customerCount" placeholder="# of Customers">
 
       <button type="submit">Simulate Purchase</button>
     
     
       <select name="itemSelect">
+        <option value="" disabled selected>Select item to simulate</option>
         ${choices}
 
 
@@ -65,6 +69,15 @@
     </form>
 
   </div>
+
+    <form action="/reset" method="POST" class="float-right mr-5">
+
+      <button type="submit">Reset Simulation</button>
+
+
+
+    </form>
+
 
       
 </body>

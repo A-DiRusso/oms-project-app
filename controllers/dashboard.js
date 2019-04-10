@@ -27,6 +27,9 @@ async function showDashboard(req, res) {
           ${item.stock}
         </div>
         <div class="col-sm border bg-secondary">
+          ${item.simulatedStock}
+        </div>
+        <div class="col-sm border bg-secondary">
           ${item.location_id}
         </div>
         </div>
@@ -65,15 +68,36 @@ async function simulatePurchase(req, res) {
   
   // 2. needs to create a record of the purchase in purchases table
   await Purchase.newPurchase(itemID, 2, 1, date);
-  i++
-}
+  i++;
+  }
+
 res.redirect('/');
+
+}
+
+async function resetSim(req, res) {
+
+  // needs to update numbers in simulated stock column to match original stock
+  const allItems = await Item.getAll();
+
+  // each of the items in allItems needs to call resetStock
+  const arrayOfPromises = allItems.map(async item => {
+    return await item.resetStock()
+  })
+
+  Promise.all(arrayOfPromises).then(values => {
+    
+    res.redirect('/');
+    
+  })
+
 
 }
 
 module.exports = {
   showDashboard,
   simulatePurchase,
+  resetSim
   
 }
 

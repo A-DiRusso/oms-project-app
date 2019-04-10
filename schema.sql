@@ -24,6 +24,7 @@ create table items (
     wholesale money,
     retail money,
     stock integer,
+    simulated_stock integer,
     location_id integer references locations(id)
 );
 
