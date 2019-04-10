@@ -67,11 +67,16 @@ async function simulatePurchase(req, res) {
 
   
   // 2. needs to create a record of the purchase in purchases table
+  
   await Purchase.newPurchase(itemID, 2, 1, date);
   i++;
   }
+  const sum = await Purchase.totalRevenue()
+  console.log('----------------------')
+  console.log(sum)
+  console.log('----------------------')
 
-res.redirect('/');
+  res.redirect('/');
 
 }
 

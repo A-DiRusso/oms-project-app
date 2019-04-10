@@ -8,7 +8,7 @@
     <title>OMS</title>
 </head>
 <body>
-    <section class="jumbotron text-center">
+    <section class="text-center">
         <div class="container">
           <h1 class="jumbotron-heading">Welcome to your OMS App.  <br>
             Project By Eric, Eric, and Tony llc.</h1>
@@ -52,6 +52,10 @@
 
   <div class="container mt-5">
     <form action="/buy" method="POST">
+      <select name="itemSelect">
+        <option value="" disabled selected>Select item to simulate</option>
+        ${choices}
+      </select>
       <label id="purchased_item" class="sr-only">Simulate Purchase</label>
     
       <input type="number" name="customerCount" placeholder="# of Customers">
@@ -59,24 +63,20 @@
       <button type="submit">Simulate Purchase</button>
     
     
-      <select name="itemSelect">
-        <option value="" disabled selected>Select item to simulate</option>
-        ${choices}
-
-
-
-      </select>
     </form>
 
   </div>
 
     <form action="/reset" method="POST" class="float-right mr-5">
-
       <button type="submit">Reset Simulation</button>
-
-
-
     </form>
+
+<div class="container mt-5">
+  <h2>Simulated Data</h2>
+  <h3>Simulated Revenue</h3>
+
+
+</div>
 
 
       

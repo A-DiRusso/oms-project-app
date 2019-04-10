@@ -24,9 +24,3 @@ VALUES
 ('Clueless', 'getaclue97', '7', 1.00, 8.00, 2, 2, 1),
 ('The Lion King', 'kingleo94', '19', 3.00, 6.00, 50, 50, 1);
 
-insert into purchases
-(item_id, customer_id, location_id, purchase_date)
-VALUES
-
-(1, 1, 1, '2019-04-09');
-

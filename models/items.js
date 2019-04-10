@@ -16,6 +16,7 @@ class Item {
     static getAll() {
         return db.any(`
             select * from items
+            order by name;
         `)
         .then(itemsData => {
             const arrayOfInstances = itemsData.map(item => new Item (item.id,
