@@ -23,6 +23,7 @@ create table items (
     lead_time integer,
     wholesale money,
     retail money,
+    stock integer,
     location_id integer references locations(id)
 );
 
