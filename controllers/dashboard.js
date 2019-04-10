@@ -31,22 +31,34 @@ async function showDashboard(req, res) {
         </div>
         </div>
         `
-       });  
+       });
+       const itemChoices = allItems.map(item => {
+         return `
+          <option name=${item.name} value=${item.name}>${item.name}</option>
+
+         `
+       });
+
        res.render('dashboard', {
            locals: {
-               items: itemsList.join('')
+               items: itemsList.join(''),
+               choices: itemChoices.join('')
+              
            }
        });
 }
 
 async function simulatePurchase(req, res) {
-console.log(req);
+
  // 1. needs to deduct x amount of stock from whatever item was just purchased
   let i = 0;
-  while(i < 5) {
-  const itemID = 2;
+  console.log(req.body);
+  const itemName = req.body.itemSelect;
+  const itemInstance = await Item.getByName(itemName);
+  while(i < req.body.customerCount) {
+  const itemID = itemInstance.id;
 
-  await Item.adjustStock(-1, 5);
+  await Item.adjustStock(-1, itemID);
 
   const date = '2019-04-10';
 

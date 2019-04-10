@@ -50,12 +50,19 @@
   <div class="container mt-5">
     <form action="/buy" method="POST">
       <label id="purchased_item" class="sr-only">Simulate Purchase</label>
-      <input name="purchased_item" type="hidden" id="purchased_item">
+    
+      <input type="number" name="customerCount">
 
       <button type="submit">Simulate Purchase</button>
     
-    </form>
+    
+      <select name="itemSelect">
+        ${choices}
 
+
+
+      </select>
+    </form>
 
   </div>
 
