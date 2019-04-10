@@ -71,7 +71,7 @@ async function simulatePurchase(req, res) {
   await Purchase.newPurchase(itemID, 2, 1, date);
   i++;
   }
-  const sum = await Purchase.totalRevenue()
+  let sum = await Purchase.totalRevenue()
   console.log('----------------------')
   console.log(sum)
   console.log('----------------------')
