@@ -41,11 +41,17 @@ async function showDashboard(req, res) {
 
          `
        });
-
+       let sum = 0;
+       if (req.session.sum) {
+          sum = req.session.sum;
+       } else {
+          sum = '';
+       }
        res.render('dashboard', {
            locals: {
-               items: itemsList.join(''),
-               choices: itemChoices.join('')
+              items: itemsList.join(''),
+              choices: itemChoices.join(''),
+              revenueTotal: req.session.sum
               
            }
        });
@@ -71,16 +77,21 @@ async function simulatePurchase(req, res) {
   await Purchase.newPurchase(itemID, 2, 1, date);
   i++;
   }
-  const sum = await Purchase.totalRevenue()
-  console.log('----------------------')
-  console.log(sum)
-  console.log('----------------------')
+  // retrieve sum of revenues for the day
+  let sum = await Purchase.totalRevenue()
+  req.session.sum = sum;
+  req.session.save(() => {
+    res.redirect('/');
+  })
 
-  res.redirect('/');
 
 }
 
 async function resetSim(req, res) {
+
+  await Purchase.deleteAll();
+  req.session.sum = '';
+  req.session.save();
 
   // needs to update numbers in simulated stock column to match original stock
   const allItems = await Item.getAll();

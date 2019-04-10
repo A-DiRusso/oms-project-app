@@ -21,16 +21,20 @@ class Purchase {
         `)
     }
     static totalRevenue() {
-        db.any(`
+        return db.any(`
         select sum(retail) from items itms
         inner join purchases pchs
         on itms.id = pchs.item_id;
         `)
         .then(value => {
-            console.log(value)
-            return value;
+            return value[0].sum;
         })
         
+    }
+    static deleteAll() {
+        return db.result(`
+        delete from purchases
+        `)
     }
 
 }
