@@ -27,10 +27,14 @@ class Purchase {
         on itms.id = pchs.item_id;
         `)
         .then(value => {
-            console.log(value[0].sum)
             return value[0].sum;
         })
         
+    }
+    static deleteAll() {
+        return db.result(`
+        delete from purchases
+        `)
     }
 
 }
