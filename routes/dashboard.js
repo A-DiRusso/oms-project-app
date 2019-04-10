@@ -4,12 +4,13 @@ const dashboardRouter =  express.Router();
 const {
     showDashboard,
     simulatePurchase,
-    redirectToDashboard
+    resetSim
 } = require('../controllers/dashboard');
 
 dashboardRouter.get('/', showDashboard);
 
 dashboardRouter.post('/buy', simulatePurchase);
 
+dashboardRouter.post('/reset', resetSim);
 
 module.exports = dashboardRouter;
