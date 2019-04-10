@@ -1,13 +1,14 @@
 const db = require('./conn');
 
 class Item {
-    constructor(id, name, sku, lead_time, wholesale, retail, location_id) {
+    constructor(id, name, sku, lead_time, wholesale, retail, stock, location_id) {
         this.id = id;
         this.name = name;
         this.sku = sku;
         this.leadTime = lead_time;
         this.wholesale = wholesale;
         this.retail = retail;
+        this.stock = stock;
         this.location_id = location_id;
     }
 
@@ -22,10 +23,23 @@ class Item {
                     item.lead_time,
                     item.wholesale,
                     item.retail,
+                    item.stock,
                     item.location_id
             ))
             return arrayOfInstances;
         });
+    }
+
+    static adjustStock(qty, itemID) {
+
+        // delete/add qty to specific item's stock
+        return db.result(`
+        UPDATE items
+        SET stock = stock + ${qty}
+        WHERE id=${itemID}
+        `)
+
+
     }
 }
 

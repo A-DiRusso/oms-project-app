@@ -18,33 +18,47 @@
         </p>
         </div>
       </section>
-      <div class="container">
-        <div class="row text-center text-white">
-          <div class="col-sm border bg-secondary">
-            Item
-          </div>
-          <div class="col-sm border bg-secondary">
-            SKU
-          </div>
-          <div class="col-sm border bg-secondary">
-            Lead Time
-          </div>
-          <div class="col-sm border bg-secondary">
-            Wholesale
-          </div>
-          <div class="col-sm border bg-secondary">
-            Retail
-          </div>
-          <div class="col-sm border bg-secondary">
-            Location_id
-          </div>
-          </div>
-          ${items}
-
-
-
-
-
+  <div class="container">
+    <div class="row text-center text-white">
+      <div class="col-sm border bg-secondary">
+        Item
       </div>
+      <div class="col-sm border bg-secondary">
+        SKU
+      </div>
+      <div class="col-sm border bg-secondary">
+        Lead Time
+      </div>
+      <div class="col-sm border bg-secondary">
+        Wholesale
+      </div>
+      <div class="col-sm border bg-secondary">
+        Retail
+      </div>
+      <div class="col-sm border bg-secondary">
+        Stock
+      </div>
+      <div class="col-sm border bg-secondary">
+        Location_id
+      </div>
+      </div>
+      ${items}
+
+  </div>
+
+
+  <div class="container mt-5">
+    <form action="/buy" method="POST">
+      <label id="purchased_item" class="sr-only">Simulate Purchase</label>
+      <input name="purchased_item" type="hidden" id="purchased_item">
+
+      <button type="submit">Simulate Purchase</button>
+    
+    </form>
+
+
+  </div>
+
+      
 </body>
 </html>
