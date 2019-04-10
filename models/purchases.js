@@ -20,7 +20,18 @@ class Purchase {
         VALUES (${itemID}, ${customerID}, ${locationID}, '${date}')
         `)
     }
-
+    static totalRevenue() {
+        db.any(`
+        select sum(retail) from items itms
+        inner join purchases pchs
+        on itms.id = pchs.item_id;
+        `)
+        .then(value => {
+            console.log(value)
+            return value;
+        })
+        
+    }
 
 }
 
