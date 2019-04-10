@@ -55,6 +55,7 @@
       <select name="itemSelect">
         <option value="" disabled selected>Select item to simulate</option>
         <option value="random" name="random">Random Simulation</option>
+        ${choices}
       </select>
       <label id="purchased_item" class="sr-only">Simulate Purchase</label>
     
@@ -73,7 +74,9 @@
 
 <div class="container mt-5">
   <h2>Simulated Data</h2>
-  <h5>Simulated Revenue: ${revenueTotal}</h5>
+  <h5>Revenue: ${revenueTotal}</h5>
+  <h5>Cost of Outgoing Stock: ${soldStockTotalCost} </h5>
+  <h5>Profits: ${profit}</h5>
   
 
 </div>

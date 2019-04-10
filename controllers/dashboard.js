@@ -49,12 +49,19 @@ async function showDashboard(req, res) {
        } else {
           sum = '';
        }
+       let soldStockSum = 0;
+       if (req.session.sum) {
+         soldStockSum = req.session.soldStockSum;
+       } else {
+         soldStockSum = '';
+       }
        res.render('dashboard', {
            locals: {
               items: itemsList.join(''),
               choices: itemChoices.join(''),
-              revenueTotal: req.session.sum
-              
+              revenueTotal: req.session.sum,
+              soldStockTotalCost: req.session.soldStockSum,
+              profit: ""
            }
        });
 }
@@ -105,10 +112,16 @@ async function simulatePurchase(req, res) {
   // retrieve sum of revenues for the day
   let sum = await Purchase.totalRevenue()
   req.session.sum = sum;
+  // retrieve sum of sold stock costs for the day
+  let soldStockSum = await Purchase.sumSoldStockCost()
+  console.log("------------------")
+  console.log(soldStockSum);
+  console.log("------------------")
+  req.session.soldStockSum = soldStockSum;
+
   req.session.save(() => {
     res.redirect('/');
   })
-
 
 }
 
@@ -116,6 +129,7 @@ async function resetSim(req, res) {
 
   await Purchase.deleteAll();
   req.session.sum = '';
+  req.session.soldStockSum = '';
   req.session.save();
 
   // needs to update numbers in simulated stock column to match original stock
