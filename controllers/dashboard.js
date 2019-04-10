@@ -40,9 +40,10 @@ async function showDashboard(req, res) {
 }
 
 async function simulatePurchase(req, res) {
-
+console.log(req);
  // 1. needs to deduct x amount of stock from whatever item was just purchased
-
+  let i = 0;
+  while(i < 5) {
   const itemID = 2;
 
   await Item.adjustStock(-1, 5);
@@ -52,14 +53,15 @@ async function simulatePurchase(req, res) {
   
   // 2. needs to create a record of the purchase in purchases table
   await Purchase.newPurchase(itemID, 2, 1, date);
-
-  
-  res.redirect('/');
+  i++
+}
+res.redirect('/');
 
 }
 
 module.exports = {
   showDashboard,
-  simulatePurchase
+  simulatePurchase,
   
 }
+
