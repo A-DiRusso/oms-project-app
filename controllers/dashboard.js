@@ -7,7 +7,13 @@ async function showDashboard(req, res) {
 
     console.log(req.session);
 
-    const purchasesTotals = req.session.purchaseTotals;
+    let purchaseTotals = {};
+
+    if (req.session.purchaseTotals) {
+      purchaseTotals = req.session.purchaseTotals;
+    }
+    
+
     const allItems = await Item.getAll();
 
     let addItemsButton = '';
@@ -18,7 +24,7 @@ async function showDashboard(req, res) {
     const itemsList = allItems.map(item => {
 
       // get purchase total for that particular item
-      const itemPurchaseTotal = purchasesTotals[item.id];
+      const itemPurchaseTotal = purchaseTotals[item.id];
       // set background color to a variable
       let bgColor = '';
       if (itemPurchaseTotal > 0) {
