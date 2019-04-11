@@ -31,6 +31,23 @@ class Purchase {
         })
         
     }
+
+    static getAll() {
+        return db.any(`
+        select * from purchases
+        
+        `)
+        .then(purchasesData => {
+            const arrayOfPurchases = purchasesData.map(purchase => {
+                return new Purchase(purchase.id, purchase.item_id, purchase.customer_id, purchase.location_id, purchase.purchase_date);
+            })
+            return arrayOfPurchases;
+
+        })
+    }
+
+
+
     static deleteAll() {
         return db.result(`
         delete from purchases
