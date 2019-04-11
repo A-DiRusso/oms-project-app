@@ -9,6 +9,12 @@ async function showDashboard(req, res) {
 
     const purchasesTotals = req.session.purchaseTotals;
     const allItems = await Item.getAll();
+
+    let addItemsButton = '';
+    // determine whether or not to show add items button
+    if (allItems.length === 0) {
+      addItemsButton = `<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>`
+    }
     const itemsList = allItems.map(item => {
 
       // get purchase total for that particular item
@@ -80,6 +86,7 @@ async function showDashboard(req, res) {
        console.log(profit);
        res.render('dashboard', {
            locals: {
+              additems: addItemsButton,
               items: itemsList.join(''),
               choices: itemChoices.join(''),
               revenueTotal: req.session.sum,
@@ -234,10 +241,32 @@ async function resetSim(req, res) {
 }
 
 
+async function clearTable(req, res) {
+  // needs to wipe clean all data that is in the items table
+  await Purchase.deleteAll();
+  await Item.deleteAll();
+
+  res.redirect('/');
+
+}
+
+async function createTable(req, res) {
+  // needs to add each item entered in the form to sql table items
+
+  // all form input is stored in req.body object
+  const itemObject = req.body;
+  await Item.addItem(itemObject);
+
+  // redirect to dashboard
+  res.redirect('/');
+
+}
+
 module.exports = {
   showDashboard,
   simulatePurchase,
-  resetSim
-  
+  resetSim,
+  clearTable,
+  createTable
 }
 
