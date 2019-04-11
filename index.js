@@ -1,5 +1,5 @@
-
 require('dotenv').config();
+
 const express = require('express');
 const PORT =process.env.PORT;
 const app = express();
@@ -17,6 +17,7 @@ app.set('view engine','html');
 
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+const setupAuth = require('./auth');
 
 
 const dashboardRouter = require('./routes/dashboard');
@@ -29,14 +30,13 @@ app.use(session( {
 ));
 
 
+setupAuth(app);
+
+
 app.use('/login', loginRouter);
 app.use('/signup', signUpRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
 
 app.use('/',dashboardRouter);
 
