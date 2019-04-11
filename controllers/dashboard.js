@@ -1,5 +1,7 @@
 const Item = require('../models/items');
 const Purchase = require('../models/purchases');
+const furniture = require('../presets/furniture');
+const chipotle = require('../presets/chipotle');
 
 
 
@@ -16,24 +18,30 @@ async function showDashboard(req, res) {
 
     const allItems = await Item.getAll();
 
-    let addItemsButton = '';
-    // determine whether or not to show add items button
-    if (allItems.length === 0) {
-      addItemsButton = `<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>`
-    }
+    let addItemsButton = '<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
+  
     const itemsList = allItems.map(item => {
 
       // get purchase total for that particular item
       const itemPurchaseTotal = purchaseTotals[item.id];
       // set background color to a variable
       let bgColor = '';
-      if (itemPurchaseTotal > 0) {
-        bgColor = 'bg-danger';
+      if (itemPurchaseTotal > 100) {
+        bgColor = 'darker-red';
       // else if there are no purchase records for that item (nothing purchased yet)
-      } else if (!itemPurchaseTotal) {
-        bgColor = 'bg-secondary';
+      } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
+      
+        bgColor = 'bg-danger';
+      
+      } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
+        bgColor = 'bg-warning';
+
+      } else if (!itemPurchaseTotal) {
+
+        bgColor = 'bg-secondary';
       }
+
       console.log('&&&&&&&&&&&&&&&&&');
       console.log(itemPurchaseTotal);
       console.log('&&&&&&&&&&&&&&&&&');
@@ -136,7 +144,6 @@ async function simulatePurchase(req, res) {
         customerCounter++;
       }
 
-      console.log(`Next day`);
       day++;
 
     }
@@ -145,7 +152,6 @@ async function simulatePurchase(req, res) {
 
   } else  {
 
-    console.log('getting to else block');
     //specific/normal operation 
     const itemInstance = await Item.getByName(itemName);
 
@@ -254,12 +260,66 @@ async function clearTable(req, res) {
 
 async function createTable(req, res) {
   // needs to add each item entered in the form to sql table items
-
   // all form input is stored in req.body object
-  const itemObject = req.body;
-  await Item.addItem(itemObject);
+
+  console.log(req.body);
+
+  // loop through however many items user wants to add
+  for (let i = 0; i < req.body.itemname.length; i++) {
+
+    const itemObject = {};
+
+    itemObject.itemname = req.body.itemname[i];
+    itemObject.sku = req.body.sku[i];
+    itemObject.leadtime = req.body.leadtime[i];
+    itemObject.wholesale = req.body.wholesale[i];
+    itemObject.retail = req.body.retail[i];
+    itemObject.stock = req.body.stock[i];
+    itemObject.locationid = req.body.locationid[i];
+
+    console.log('^^^^^^^^^^^^^^^^^^^')
+    console.log(itemObject);
+    console.log('^^^^^^^^^^^^^^^^^^^')
+
+    await Item.addItem(itemObject);
+
+  }
+
+
+  // const itemObject = req.body;
+  // await Item.addItem(itemObject);
 
   // redirect to dashboard
+  res.redirect('/');
+}
+
+async function createTableFurniture(req, res) {
+
+  // create a bunch of preset objects for furniture;
+  const furnitureArray = furniture();
+
+  console.log(furnitureArray);
+
+  for (let i = 0; i < furnitureArray.length; i++) {
+
+    await Item.addItem(furnitureArray[i]);
+
+  }
+
+  res.redirect('/');
+
+
+}
+
+async function createTableChipotle(req, res) {
+
+  const chipotleArray = chipotle();
+
+  for (let i = 0; i < chipotleArray.length; i++) {
+
+    await Item.addItem(chipotleArray[i]);
+
+  }
   res.redirect('/');
 }
 
@@ -268,6 +328,8 @@ module.exports = {
   simulatePurchase,
   resetSim,
   clearTable,
-  createTable
+  createTable,
+  createTableFurniture,
+  createTableChipotle
 }
 

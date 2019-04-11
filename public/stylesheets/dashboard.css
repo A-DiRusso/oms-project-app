@@ -1,0 +1,19 @@
+.modal-lg {
+    max-width: 90% !important;
+}
+
+.darker-red {
+
+    background-color: rgb(127, 14, 14);
+}
+
+.lighter-red {
+    background-color: rgb(196, 19, 19);
+}
+
+
+.lightest-red {
+
+    background-color: rgb(232, 139, 116);
+
+}
