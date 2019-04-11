@@ -26,13 +26,22 @@ async function showDashboard(req, res) {
       const itemPurchaseTotal = purchaseTotals[item.id];
       // set background color to a variable
       let bgColor = '';
-      if (itemPurchaseTotal > 0) {
-        bgColor = 'bg-danger';
+      if (itemPurchaseTotal > 100) {
+        bgColor = 'darker-red';
       // else if there are no purchase records for that item (nothing purchased yet)
-      } else if (!itemPurchaseTotal) {
-        bgColor = 'bg-secondary';
+      } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
+      
+        bgColor = 'lighter-red';
+      
+      } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
+        bgColor = 'lightest-red';
+
+      } else if (!itemPurchaseTotal) {
+
+        bgColor = 'bg-secondary';
       }
+
       console.log('&&&&&&&&&&&&&&&&&');
       console.log(itemPurchaseTotal);
       console.log('&&&&&&&&&&&&&&&&&');
@@ -136,7 +145,6 @@ async function simulatePurchase(req, res) {
         customerCounter++;
       }
 
-      console.log(`Next day`);
       day++;
 
     }
@@ -145,7 +153,6 @@ async function simulatePurchase(req, res) {
 
   } else  {
 
-    console.log('getting to else block');
     //specific/normal operation 
     const itemInstance = await Item.getByName(itemName);
 
