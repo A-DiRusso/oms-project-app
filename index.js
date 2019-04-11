@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const PORT =process.env.PORT;
 const app = express();
+const path = require('path');
+
 
 const helmet = require('helmet');
 app.use(helmet());
@@ -26,8 +28,13 @@ app.use(session( {
     secret: process.env.SECRET    }      //just a random string to help encrypt
 ));
 
+
 app.use('/login', loginRouter);
 app.use('/signup', signUpRouter);
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 
 

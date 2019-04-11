@@ -31,6 +31,33 @@ class Purchase {
         })
         
     }
+
+    static getAll() {
+        return db.any(`
+        select * from purchases
+        
+        `)
+        .then(purchasesData => {
+            const arrayOfPurchases = purchasesData.map(purchase => {
+                return new Purchase(purchase.id, purchase.item_id, purchase.customer_id, purchase.location_id, purchase.purchase_date);
+            })
+            return arrayOfPurchases;
+
+        })
+    }
+
+    static sumSoldStockCost() {
+        return db.any(`
+        select sum(wholesale) from items itms
+        inner join purchases pchs
+        on itms.id = pchs.item_id;
+        `)
+        .then(value => {
+            return value[0].sum;
+        })
+        
+    }
+  
     static deleteAll() {
         return db.result(`
         delete from purchases

@@ -61,7 +61,6 @@ class Item {
         where name ilike '${name}'
         `)
         .then(item => {
-            console.log(item);
             const itemInstance = new Item(item.id,
                 item.name,
                 item.sku,
@@ -75,6 +74,22 @@ class Item {
             )
             return itemInstance;
         })
+    }
+
+    static deleteAll() {
+        // delete all items from items table
+        return db.result(`
+        DELETE from items
+        `)
+    }
+
+    static addItem(itemObject) {
+        // needs to add all items entered in form to items table
+        return db.result(`
+        INSERT INTO items (name, sku, lead_time, wholesale, retail, stock, simulated_stock, location_id) 
+        values ($1, $2, $3, $4, $5, $6, $7, $8)
+        
+        `, [itemObject.itemname, itemObject.sku, itemObject.leadtime, itemObject.wholesale, itemObject.retail, itemObject.stock, itemObject.stock, itemObject.locationid]);
     }
 
 }
