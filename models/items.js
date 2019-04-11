@@ -61,7 +61,6 @@ class Item {
         where name ilike '${name}'
         `)
         .then(item => {
-            console.log(item);
             const itemInstance = new Item(item.id,
                 item.name,
                 item.sku,

@@ -58,13 +58,29 @@
         ${choices}
       </select>
       <label id="purchased_item" class="sr-only">Simulate Purchase</label>
-    
-      <input type="number" name="customerCount" placeholder="# of Customers">
+      
+      <select name="numOfDays">
+        <option value="" disabled selected># of Days</option>
+        <option value="1" name="1">1</option>
+        <option value="2" name="1">2</option>
+        <option value="3" name="1">3</option>
+        <option value="4" name="1">4</option>
+        <option value="5" name="1">5</option>
+      </select>
 
-      <button type="submit">Simulate Purchase</button>
+
+
+      <input type="number" name="customerCount" placeholder="Customers per day">
+
+      <button data-simulate type="submit">Simulate</button>
     
     
     </form>
+
+    <div data-waiting>
+
+      
+    </div>
 
   </div>
 
@@ -82,6 +98,6 @@
 </div>
 
 
-      
+<script src="/javascripts/dashboard.js"></script>
 </body>
 </html>

@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const PORT =process.env.PORT;
 const app = express();
+const path = require('path');
+
 
 app.use(express.urlencoded({ extended: false}));
 const es6Renderer = require('express-es6-template-engine');
@@ -18,6 +20,8 @@ app.use(session( {
     store: new FileStore(),   //no options for now
     secret: process.env.SECRET    }      //just a random string to help encrypt
 ));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
