@@ -4,6 +4,9 @@ const express = require('express');
 const PORT =process.env.PORT;
 const app = express();
 
+const helmet = require('helmet');
+app.use(helmet());
+
 app.use(express.urlencoded({ extended: false}));
 const es6Renderer = require('express-es6-template-engine');
 app.engine('html', es6Renderer);
@@ -12,8 +15,11 @@ app.set('view engine','html');
 
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+
+
 const dashboardRouter = require('./routes/dashboard');
 const loginRouter = require('./routes/login');
+const signUpRouter = require('./routes/signup');
 
 app.use(session( {
     store: new FileStore(),   //no options for now
@@ -21,6 +27,7 @@ app.use(session( {
 ));
 
 app.use('/login', loginRouter);
+app.use('/signup', signUpRouter);
 
 
 

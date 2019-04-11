@@ -35,4 +35,4 @@ class User {
 
 
 
-modules.exports = User;
+module.exports = User;
