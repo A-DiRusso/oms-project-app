@@ -13,16 +13,22 @@ app.set('view engine','html');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const dashboardRouter = require('./routes/dashboard');
+const loginRouter = require('./routes/login');
 
 app.use(session( {
     store: new FileStore(),   //no options for now
     secret: process.env.SECRET    }      //just a random string to help encrypt
 ));
 
+app.use('/login', loginRouter);
 
 
 
 app.use('/',dashboardRouter);
+
+app.all('*',(req, res) => {
+    res.render('index');
+})
 
 
 app.listen(PORT,() => {
