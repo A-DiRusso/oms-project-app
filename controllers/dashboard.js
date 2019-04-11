@@ -55,13 +55,16 @@ async function showDashboard(req, res) {
        } else {
          soldStockSum = '';
        }
+       // commas are breaking this formula. how to fix?
+       let profit = ("$" + (parseFloat(req.session.sum.substring(1).replace(',', '')) - parseFloat(req.session.soldStockSum.substring(1).replace(',', ''))).toFixed(2).replace( /\d{1,3}(?=(\d{3})+(?!\d))/g , "$&,"));
+       console.log(profit);
        res.render('dashboard', {
            locals: {
               items: itemsList.join(''),
               choices: itemChoices.join(''),
               revenueTotal: req.session.sum,
               soldStockTotalCost: req.session.soldStockSum,
-              profit: ""
+              profit: profit
            }
        });
 }
@@ -114,15 +117,11 @@ async function simulatePurchase(req, res) {
   req.session.sum = sum;
   // retrieve sum of sold stock costs for the day
   let soldStockSum = await Purchase.sumSoldStockCost()
-  console.log("------------------")
-  console.log(soldStockSum);
-  console.log("------------------")
   req.session.soldStockSum = soldStockSum;
 
   req.session.save(() => {
     res.redirect('/');
   })
-
 }
 
 async function resetSim(req, res) {
