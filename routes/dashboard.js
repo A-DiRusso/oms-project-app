@@ -4,7 +4,9 @@ const dashboardRouter =  express.Router();
 const {
     showDashboard,
     simulatePurchase,
-    resetSim
+    resetSim,
+    clearTable,
+    createTable
 } = require('../controllers/dashboard');
 
 dashboardRouter.get('/', showDashboard);
@@ -12,5 +14,9 @@ dashboardRouter.get('/', showDashboard);
 dashboardRouter.post('/buy', simulatePurchase);
 
 dashboardRouter.post('/reset', resetSim);
+
+dashboardRouter.post('/cleartable', clearTable);
+
+dashboardRouter.post('/createtable', createTable);
 
 module.exports = dashboardRouter;
