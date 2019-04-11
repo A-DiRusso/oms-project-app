@@ -4,24 +4,19 @@ async function  createNewUser(req, res) {
     const newUser = await User.getByEmail(req.body.email);
     if (newUser === null) {
         const newPassword = User.hashPassword(req.body.password);
-        await User.insertUser(req.body.firstname, req.body.lastname, req.body.email, newPassword);
+        await User.insertUser(req.body.email, newPassword, req.body.firstname, req.body.lastname);
+        // await User.insertUser(req.body.firstname, req.body.lastname, req.body.email, newPassword);
 //save email to session
         req.session.email = req.body.email;
         req.session.save( async () => {
             res.render('login',{locals:{message:"Please Log in",email:req.session.email}})
         })
-//send them to login with email filled
 
-    } else {
+
+    } else { //send them to login with email filled
         res.render('login', {locals: {message: 'Looks like we know each other, please log in', email:req.body.email}})
     }
-     //hash the pass word and save user to db
-    
-    //pull it out of the db for the unique id
-
-    //create {} for future use 
-    // const newUserInfo = new User ()
-    //save id+ to session
+     
 
     
 }
