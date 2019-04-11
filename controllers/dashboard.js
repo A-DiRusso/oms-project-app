@@ -10,7 +10,7 @@ async function showDashboard(req, res) {
     console.log(req.session);
 
     let purchaseTotals = {};
-
+    
     if (req.session.purchaseTotals) {
       purchaseTotals = req.session.purchaseTotals;
     }
@@ -96,15 +96,14 @@ async function showDashboard(req, res) {
           sum = '';
           profit = '';
        }
-       // commas are breaking this formula. how to fix?
-       console.log(profit);
+
        res.render('dashboard', {
            locals: {
               additems: addItemsButton,
               items: itemsList.join(''),
               choices: itemChoices.join(''),
-              revenueTotal: req.session.sum,
-              soldStockTotalCost: req.session.soldStockSum,
+              revenueTotal: sum,
+              soldStockTotalCost: soldStockSum,
               profit: profit
            }
        });
@@ -248,8 +247,6 @@ async function resetSim(req, res) {
     res.redirect('/');
     
   })
-
-
 }
 
 
@@ -259,7 +256,6 @@ async function clearTable(req, res) {
   await Item.deleteAll();
 
   res.redirect('/');
-
 }
 
 async function createTable(req, res) {
@@ -295,7 +291,6 @@ async function createTable(req, res) {
 
   // redirect to dashboard
   res.redirect('/');
-
 }
 
 async function createTableFurniture(req, res) {

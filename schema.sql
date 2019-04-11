@@ -8,8 +8,10 @@ create table customers (
 
 create table users (
     id serial primary key,
-    company_name varchar(200),
-    password varchar(500)
+    company_email varchar(200),
+    password varchar(500),
+    first_name varchar(200),
+    last_name varchar(200)
 );
 create table locations (
     id serial primary key,

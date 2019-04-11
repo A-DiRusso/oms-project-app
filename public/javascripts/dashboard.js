@@ -15,8 +15,8 @@ simulateButton.addEventListener('click', function() {
 
 })
 
-addItemButton.addEventListener('click', function() {
 
+addItemButton.addEventListener('click', function() {
 
     const newItemDiv = document.createElement('div');
     newItemDiv.innerHTML= `
