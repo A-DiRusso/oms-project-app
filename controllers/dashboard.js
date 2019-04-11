@@ -61,7 +61,7 @@ async function showDashboard(req, res) {
 
 async function simulatePurchase(req, res) {
 
- // 1. needs to deduct x amount of stock from whatever item was just purchased
+  // 1. needs to deduct x amount of stock from whatever item was just purchased
   console.log(req.body);
 
   // number of days to simulate, as entered by user
@@ -71,6 +71,7 @@ async function simulatePurchase(req, res) {
   console.log(`------------------------------`);
   
   const itemName = req.body.itemSelect.replace(/-/g, ' ');
+
   if (req.body.itemSelect === "random") {
     
     const allItems = await Item.getAll();
@@ -107,6 +108,8 @@ async function simulatePurchase(req, res) {
     //run while loop replacing itemid with random less than allItemsArray.length
 
   } else  {
+
+    console.log('getting to else block');
     //specific/normal operation 
     const itemInstance = await Item.getByName(itemName);
 
@@ -137,14 +140,13 @@ async function simulatePurchase(req, res) {
 
     }
   }
- 
+
   // retrieve sum of revenues for the day
   let sum = await Purchase.totalRevenue()
   req.session.sum = sum;
   req.session.save(() => {
     res.redirect('/');
   })
-
 
 }
 
@@ -170,6 +172,7 @@ async function resetSim(req, res) {
 
 
 }
+
 
 module.exports = {
   showDashboard,
