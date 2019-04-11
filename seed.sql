@@ -6,9 +6,9 @@ VALUES
 ('Gary', 'Busey', 'coke@snowball.com', null);
 
 insert into users
-(company_name, password)
+(company_email, password, first_name, last_name)
 VALUES
-('Blockbuster', 'password');
+('Barry@Blockbuster', 'password', 'Barry', 'Blockbuster');
 
 insert into locations
 (location_name)
