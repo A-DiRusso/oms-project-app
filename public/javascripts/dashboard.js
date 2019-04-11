@@ -14,3 +14,6 @@ simulateButton.addEventListener('click', function() {
     waitingDiv.append(h2);
 
 })
+
+
+

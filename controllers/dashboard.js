@@ -241,8 +241,6 @@ async function resetSim(req, res) {
     res.redirect('/');
     
   })
-
-
 }
 
 
@@ -252,7 +250,6 @@ async function clearTable(req, res) {
   await Item.deleteAll();
 
   res.redirect('/');
-
 }
 
 async function createTable(req, res) {
@@ -264,7 +261,6 @@ async function createTable(req, res) {
 
   // redirect to dashboard
   res.redirect('/');
-
 }
 
 module.exports = {
