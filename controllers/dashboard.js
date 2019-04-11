@@ -138,7 +138,8 @@ async function simulatePurchase(req, res) {
         const itemID = itemInstance.id;
     
         await Item.adjustStock(-1, itemID);
-    
+        
+        // ********* HARDCODED DATE ***********
         const date = '2019-04-10';
         await Purchase.newPurchase(itemID, 2, 1, date);
         customerCounter++;
@@ -261,29 +262,43 @@ async function clearTable(req, res) {
 async function createTable(req, res) {
   // needs to add each item entered in the form to sql table items
   // all form input is stored in req.body object
+  console.log('&&&&&&&&&&&&&&&&&&&&');
+  console.log(req.body.itemname.length);
+  console.log('&&&&&&&&&&&&&&&&&&&&');
 
-  console.log(req.body);
+  
 
-  // loop through however many items user wants to add
-  for (let i = 0; i < req.body.itemname.length; i++) {
+  // if there is only one item being added
+  if (typeof req.body.itemname === 'string') {
 
-    const itemObject = {};
-
-    itemObject.itemname = req.body.itemname[i];
-    itemObject.sku = req.body.sku[i];
-    itemObject.leadtime = req.body.leadtime[i];
-    itemObject.wholesale = req.body.wholesale[i];
-    itemObject.retail = req.body.retail[i];
-    itemObject.stock = req.body.stock[i];
-    itemObject.locationid = req.body.locationid[i];
-
-    console.log('^^^^^^^^^^^^^^^^^^^')
-    console.log(itemObject);
-    console.log('^^^^^^^^^^^^^^^^^^^')
-
+    const itemObject = req.body;
     await Item.addItem(itemObject);
+    
+  } else {
+
+    // loop through however many items user wants to add
+    for (let i = 0; i < req.body.itemname.length; i++) {
+  
+      const itemObject = {};
+  
+      itemObject.itemname = req.body.itemname[i];
+      itemObject.sku = req.body.sku[i];
+      itemObject.leadtime = req.body.leadtime[i];
+      itemObject.wholesale = req.body.wholesale[i];
+      itemObject.retail = req.body.retail[i];
+      itemObject.stock = req.body.stock[i];
+      itemObject.locationid = req.body.locationid[i];
+  
+      console.log('^^^^^^^^^^^^^^^^^^^')
+      console.log(itemObject);
+      console.log('^^^^^^^^^^^^^^^^^^^')
+  
+      await Item.addItem(itemObject);
+  
+    }
 
   }
+
 
 
   // const itemObject = req.body;
