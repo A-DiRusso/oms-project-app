@@ -31,11 +31,11 @@ async function showDashboard(req, res) {
       // else if there are no purchase records for that item (nothing purchased yet)
       } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
       
-        bgColor = 'lighter-red';
+        bgColor = 'bg-danger';
       
       } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
-        bgColor = 'lightest-red';
+        bgColor = 'bg-warning';
 
       } else if (!itemPurchaseTotal) {
 
