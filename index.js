@@ -6,6 +6,9 @@ const app = express();
 const path = require('path');
 
 
+const helmet = require('helmet');
+app.use(helmet());
+
 app.use(express.urlencoded({ extended: false}));
 const es6Renderer = require('express-es6-template-engine');
 app.engine('html', es6Renderer);
@@ -16,21 +19,30 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const setupAuth = require('./auth');
 
+
 const dashboardRouter = require('./routes/dashboard');
 const loginRouter = require('./routes/login');
+const signUpRouter = require('./routes/signup');
 
 app.use(session( {
     store: new FileStore(),   //no options for now
     secret: process.env.SECRET    }      //just a random string to help encrypt
 ));
 
+
 setupAuth(app);
+
+
+app.use('/login', loginRouter);
+app.use('/signup', signUpRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use('/',dashboardRouter);
-app.use('/login', loginRouter)
+
+app.all('*',(req, res) => {
+    res.render('index');
+})
 
 
 app.listen(PORT,() => {
