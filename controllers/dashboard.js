@@ -44,17 +44,27 @@ async function showDashboard(req, res) {
          `
        });
        let sum = 0;
+       let soldStockSum = 0;
+       let profit = 0;
+
        if (req.session.sum) {
           sum = req.session.sum;
+          soldStockSum = req.session.soldStockSum;
+          profit = ("$" + (parseFloat(req.session.sum.substring(1).replace(',', '')) - parseFloat(req.session.soldStockSum.substring(1).replace(',', ''))).toFixed(2).replace( /\d{1,3}(?=(\d{3})+(?!\d))/g , "$&,"));
        } else {
+          soldStockSum = '';
           sum = '';
+          profit = '';
        }
+       // commas are breaking this formula. how to fix?
+       console.log(profit);
        res.render('dashboard', {
            locals: {
               items: itemsList.join(''),
               choices: itemChoices.join(''),
-              revenueTotal: req.session.sum
-              
+              revenueTotal: req.session.sum,
+              soldStockTotalCost: req.session.soldStockSum,
+              profit: profit
            }
        });
 }
@@ -105,17 +115,20 @@ async function simulatePurchase(req, res) {
   // retrieve sum of revenues for the day
   let sum = await Purchase.totalRevenue()
   req.session.sum = sum;
+  // retrieve sum of sold stock costs for the day
+  let soldStockSum = await Purchase.sumSoldStockCost()
+  req.session.soldStockSum = soldStockSum;
+
   req.session.save(() => {
     res.redirect('/');
   })
-
-
 }
 
 async function resetSim(req, res) {
 
   await Purchase.deleteAll();
   req.session.sum = '';
+  req.session.soldStockSum = '';
   req.session.save();
 
   // needs to update numbers in simulated stock column to match original stock

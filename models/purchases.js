@@ -31,6 +31,17 @@ class Purchase {
         })
         
     }
+    static sumSoldStockCost() {
+        return db.any(`
+        select sum(wholesale) from items itms
+        inner join purchases pchs
+        on itms.id = pchs.item_id;
+        `)
+        .then(value => {
+            return value[0].sum;
+        })
+        
+    }
     static deleteAll() {
         return db.result(`
         delete from purchases
