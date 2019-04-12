@@ -1,12 +1,15 @@
 const User = require('../models/users');
 
 function showLoginPage (req, res) {
-    res.render('login',{
-        locals:{
-            email:'',
-            message:''
-            
-    }});
+    req.session.destroy(() => {
+        res.render('login',{
+            locals:{
+                email:'',
+                message:''
+                
+        }});
+    });
+
 }
 
 
@@ -28,7 +31,12 @@ async function verifyUser(req, res) {
         })
         
     } else {
-        res.redirect('/signup');
+        res.render('login', {
+            locals: {
+                message:'User name or password is incorrect.',
+                email: ""
+            }
+        });
 
     }
         

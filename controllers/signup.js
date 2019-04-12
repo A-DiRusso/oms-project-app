@@ -17,13 +17,14 @@ async function  createNewUser(req, res) {
         console.log('--------------')
         
         req.session.email = req.body.email;
+        console.log('this is the req.session.email:', req.session.email);
         req.session.save( async () => {
             res.render('login', {
                 locals:{
                     message: "Signup Successful. Please Log in.",
-                    email: req.session.email
+                    email: `value=${req.session.email}`
                 }})
-                res.redirect('/login');
+                
             }
         )
 
@@ -36,7 +37,7 @@ async function  createNewUser(req, res) {
                 message: 'Looks like we know each other. Please log in.', 
                 email: req.body.email
             }})
-        res.redirect('/login')
+        
     }  
 }
 

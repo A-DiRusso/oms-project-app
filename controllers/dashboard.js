@@ -10,6 +10,7 @@ const blockbuster = require('../presets/blockbuster');
 async function showDashboard(req, res) {
 
     console.log(req.session);
+   
 
     let purchaseTotals = {};
     
@@ -123,22 +124,26 @@ async function showDashboard(req, res) {
         maxValue = Object.keys(req.session.purchaseTotalsPerDay).length;
         startValue = Object.keys(req.session.purchaseTotalsPerDay).length;
        }
-
-       res.render('dashboard', {
-           locals: {
-              additems: addItemsButton,
-              items: itemsList.join(''),
-              choices: itemChoices.join(''),
-              revenueTotal: sum,
-              soldStockTotalCost: soldStockSum,
-              profit: profit,
-              purchaseTotalsPerDay: purchaseTotalsHTML.join(''),
-              name: userName,
-              maxday: maxDayHTML,
-              maxvalue: `max=${maxValue}`,
-              startvalue: `value=${startValue}`
-           }
-       });
+      //  if(req.session.email) {
+        res.render('dashboard', {
+          locals: {
+             additems: addItemsButton,
+             items: itemsList.join(''),
+             choices: itemChoices.join(''),
+             revenueTotal: sum,
+             soldStockTotalCost: soldStockSum,
+             profit: profit,
+             purchaseTotalsPerDay: purchaseTotalsHTML.join(''),
+             name: userName,
+             maxday: maxDayHTML,
+             maxvalue: `max=${maxValue}`,
+             startvalue: `value=${startValue}`
+          }
+        });
+      // } else {
+      //   res.redirect('/login');
+      // }
+ 
 }
 
 async function simulatePurchase(req, res) {
