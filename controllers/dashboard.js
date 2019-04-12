@@ -74,7 +74,7 @@ async function showDashboard(req, res) {
        let userName = await User.getByEmail(req.session.email);
        console.log('$$$$$$$$$$$$$$$$')
        console.log(req.session)
-       console.log(userName)
+       console.log(userName.firstName)
        console.log('$$$$$$$$$$$$$$$$')
 
        if (req.session.sum) {
@@ -112,6 +112,7 @@ async function showDashboard(req, res) {
       //  if(req.session.email) {
         res.render('dashboard', {
           locals: {
+             userName: userName.firstName,
              additems: addItemsButton,
              items: itemsList.join(''),
              choices: itemChoices.join(''),
@@ -345,8 +346,6 @@ async function createTable(req, res) {
 
   }
 
-
-
   // const itemObject = req.body;
   // await Item.addItem(itemObject);
 
@@ -364,7 +363,7 @@ async function createTableFurniture(req, res) {
     await Item.addItem(furnitureArray[i]);
 
   }
-
+  
   res.redirect('/');
 
 
