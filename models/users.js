@@ -16,7 +16,7 @@ class User {
             .then((userData) => {
                 console.log(userData);
 
-                const userInstance = new User(userData.id, userData.company_email, userData.first_name, userData.last_name);
+                const userInstance = new User(userData.id, userData.company_email, userData.password, userData.first_name, userData.last_name);
                 console.log("+++++++++++++++++")
                 console.log(userInstance)
                 return userInstance;
