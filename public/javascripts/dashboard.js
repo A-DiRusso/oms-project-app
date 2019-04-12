@@ -85,62 +85,83 @@ addItemButton.addEventListener('click', function() {
 
 allChanges = [];
 
-slider.addEventListener('change', function() {
-    
-    
+slider.addEventListener('change', pullDateFromSlider);
+
+
+function pullDateFromSlider() {
+
     // what day user is on
-    let day = slider.value;
-    console.log(day);
-    
+    let day = parseInt(slider.value);
+
     // if this is the first time user is moving the slider
     if (allChanges.length === 0) {
-        allChanges.push(parseInt(day) + 1);
+        allChanges.push(day + 1);
     }
 
     // push the current day user is on the allChanges
-    allChanges.push(parseInt(day));
+    allChanges.push(day);
+
+    findDailyPurchaseTotals(day);
+
+
+}
+
+function findDailyPurchaseTotals(day) {
 
     // isolates the purchase total for that day from the purchase totals div
     const purchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+
+    changeCellValue(purchaseTotal, day)
+}
+
+function findCells() {
 
     // isolates the cell that needs to be changed
     const cellToChange = simulatedCells[0];
     const originalStockCell = originalStockCells[0];
 
-    const originalStockAll = originalStockCell.textContent.split(' ');
+    const targetedCells = {
+        cellToChange: cellToChange,
+        originalStockCell: originalStockCell
+    }   
 
-    const originalStockNum = parseInt(originalStockAll[8]);
+    return targetedCells;
 
-    console.log(originalStockNum);
+}
+
+function changeCellValue(dailyPurchaseTotal, day) {
+
+    const targetedCells = findCells();
+
+    const cellToChange = targetedCells.cellToChange;
+    const originalCell = targetedCells.originalStockCell;
+
+
+    const originalStockList = originalCell.textContent.split(' ');
+    const itemOriginalStock = parseInt(originalStockList[8]);
 
     // gets the current stock position (value that is currently in that cell)
     const currentStock = parseInt(cellToChange.textContent);
 
-    // changes the value to reflect the previous day's stock position
-    // console.log(allChanges[allChanges.length - 1]);
-    // console.log(allChanges[allChanges.length - 2]);
+    // current day is day that slider is currently on
+    const currentDay = allChanges[allChanges.length - 1];
+    // previous day is day that slider was on right before current day
+    const previousDay = allChanges[allChanges.length - 2];
 
     // if user is back to present day
-    // if the current day selected on the slider is earlier on in time (less than)
     if (parseInt(day) === 0) {
         console.log('day 0!!!!!!!!!')
-        cellToChange.textContent = originalStockNum;
-    } else if (allChanges[allChanges.length - 1] < allChanges[allChanges.length - 2]) {
+        cellToChange.textContent = itemOriginalStock;
+    // if the current day selected on the slider is earlier on in time (less than)
+    } else if (currentDay < previousDay) {
         // increase stock position by amount purchased that day
-        const dayDifference = Math.abs(allChanges[allChanges.length - 1] < allChanges[allChanges.length - 2]);
-        cellToChange.textContent = currentStock + purchaseTotal;
+        // const dayDifference = Math.abs(currentDay - previousDay);
+        cellToChange.textContent = currentStock + dailyPurchaseTotal;
     // else if current day selected on the slider is later on in time (greater than)
-    } else if (allChanges[allChanges.length - 1] > allChanges[allChanges.length - 2]){
-        cellToChange.textContent = currentStock - purchaseTotal;
+    } else if (currentDay > previousDay){
+        const dayDifference = Math.abs(currentDay - previousDay);
+        cellToChange.textContent = currentStock - dailyPurchaseTotal;
     }
-
-})
-
-
-function allChanges(day) {
-
-    allChanges.push(day);
-    return allChanges;
 
 
 }
