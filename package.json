@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon --ignore sessions index.js",
     "db:create": "createdb oms-project-app",
     "db:init": "psql -f schema.sql oms-project-app && psql -f seed.sql oms-project-app",
     "db:destroy": "dropdb oms-project-app",
