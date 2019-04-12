@@ -12,7 +12,6 @@ class User {
     }
 
     static getByEmail(company_email) {
-        console.log(company_email, 'this is the company email for Barry');
         return db.one(`SELECT * FROM users WHERE company_email=$1`, [company_email])
             .then((userData) => {
                 console.log(userData);
