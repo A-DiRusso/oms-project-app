@@ -32,6 +32,7 @@ async function showDashboard(req, res) {
       let txtColor = '';
       if (itemPurchaseTotal > 100) {
         bgColor = 'darker-red';
+        txtColor = 'text-light';
       // else if there are no purchase records for that item (nothing purchased yet)
       } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
       
@@ -39,40 +40,24 @@ async function showDashboard(req, res) {
       
       } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
-        bgColor = 'bg-warning';
+        bgColor = 'bg-warning'
 
       } else if (!itemPurchaseTotal) {
-        txtColor = 'text-secondary'
-        bgColor = 'bg-light';
+        // txtColor = 'text-secondary'
+        // bgColor = 'bg-light';
       }
 
       return `
-      <div class="row text-center text-white">
-      <div class="col-sm border bg-light text-secondary">
-        ${item.name}
-      </div>
-      <div class="col-sm border bg-light text-secondary">
-        ${item.sku}
-      </div>
-      <div class="col-sm border bg-light text-secondary">
-        ${item.leadTime}
-      </div>
-      <div class="col-sm border bg-light text-secondary">
-        ${item.wholesale}
-      </div>
-      <div class="col-sm border bg-light text-secondary">
-        ${item.retail}
-      </div>
-      <div data-original-stock class="col-sm border bg-light text-secondary">
-        ${item.stock}
-      </div>
-      <div data-simulated-stock class="col-sm border ${bgColor} ${txtColor}">
-        ${item.simulatedStock}
-      </div>
-      <div class="col-sm border bg-light text-secondary">
-        ${item.location_id}
-      </div>
-      </div>
+      <tr>
+        <td class="border">${item.name}</td>
+        <td class="border">${item.sku}</td>
+        <td class="border">${item.leadTime}</td>
+        <td class="border">${item.wholesale}</td>
+        <td class="border">${item.retail}</td>
+        <td class="border">${item.stock}</td>
+        <td class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
+        <td class="border">${item.location_id}</td>
+      </tr>
       `
        });
        const allItemsNoSpaces = allItems.map(item => item.name.replace(/ /g, '-'));
