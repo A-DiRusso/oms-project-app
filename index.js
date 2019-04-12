@@ -40,9 +40,9 @@ app.use('/signup', signUpRouter);
 
 app.use('/',dashboardRouter);
 
-app.all('*',(req, res) => {
-    res.render('index');
-})
+// app.all('*',(req, res) => {
+//     res.render('index');
+// })
 
 
 app.listen(PORT,() => {
