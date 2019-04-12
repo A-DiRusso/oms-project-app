@@ -62,7 +62,7 @@ async function showDashboard(req, res) {
       <div class="col-sm border bg-light text-secondary">
         ${item.retail}
       </div>
-      <div class="col-sm border bg-light text-secondary">
+      <div data-original-stock class="col-sm border bg-light text-secondary">
         ${item.stock}
       </div>
       <div data-simulated-stock class="col-sm border ${bgColor} ${txtColor}">
@@ -114,6 +114,15 @@ async function showDashboard(req, res) {
        }
 
        console.log(purchaseTotalsHTML);
+       let maxDayHTML = '';
+       let maxValue = '';
+       let startValue = '';
+
+       if (req.session.purchaseTotalsPerDay) {
+        maxDayHTML = `Day ${Object.keys(req.session.purchaseTotalsPerDay).length}`;
+        maxValue = Object.keys(req.session.purchaseTotalsPerDay).length;
+        startValue = Object.keys(req.session.purchaseTotalsPerDay).length;
+       }
 
        res.render('dashboard', {
            locals: {
@@ -124,7 +133,10 @@ async function showDashboard(req, res) {
               soldStockTotalCost: soldStockSum,
               profit: profit,
               purchaseTotalsPerDay: purchaseTotalsHTML.join(''),
-              name: userName
+              name: userName,
+              maxday: maxDayHTML,
+              maxvalue: `max=${maxValue}`,
+              startvalue: `value=${startValue}`
            }
        });
 }
