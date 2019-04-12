@@ -90,12 +90,15 @@ slider.addEventListener('change', pullDateFromSlider);
 
 function pullDateFromSlider() {
 
+    // get the max value (last day) of slider
+    const startDay = parseInt(slider.getAttribute('max'));
+
     // what day user is on
     let day = parseInt(slider.value);
 
     // if this is the first time user is moving the slider
     if (allChanges.length === 0) {
-        allChanges.push(day + 1);
+        allChanges.push(startDay);
     }
 
     // push the current day user is on the allChanges
@@ -108,8 +111,54 @@ function pullDateFromSlider() {
 
 function findDailyPurchaseTotals(day) {
 
+    const originalStockCell = originalStockCells[0];
+    const cellToChange = simulatedCells[0];
+
+    // previous day is day that slider was on right before current day
+    const previousDay = allChanges[allChanges.length - 2];
+
+    // this is how many days user "jumped" ahead or behind on slider
+    // positive number if user is going backwards in time (closer to day 0) left direction on slider
+    // negative number if user is going forwards in time (further from day 0) right direction on slider
+
+    const allActiveDaysArray = [];
+
+    // this for loop works only if user is going backwards in time
+    for (let i = previousDay - 1; i >= day; i--) {
+
+        allActiveDaysArray.push(i);
+
+
+    }
+    console.log(allActiveDaysArray);
+
+    let allDaysPurchaseTotal = 0;
+
     // isolates the purchase total for that day from the purchase totals div
     const purchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+
+    // for each day in the days array
+    allActiveDaysArray.forEach(day => {
+
+        let dayPurchaseTotal = 0;
+
+        // if loop is on day 0
+        if (day === 0) {
+            console.log('day 0!!!!!')
+            // purchase total for day 0 (which is implied) is original stock - all days total
+            dayPurchaseTotal = parseInt(originalStockCell.textContent) - allDaysPurchaseTotal - parseInt(cellToChange.textContent);
+            console.log(`Day 0 purchase total: ${dayPurchaseTotal}`);
+
+        } else {
+
+            dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+
+        }
+        // calculate number of purchases on that day for each item and add to total
+        allDaysPurchaseTotal += dayPurchaseTotal
+    });
+
+    console.log(allDaysPurchaseTotal);
 
     changeCellValue(purchaseTotal, day)
 }
@@ -137,8 +186,7 @@ function changeCellValue(dailyPurchaseTotal, day) {
     const originalCell = targetedCells.originalStockCell;
 
 
-    const originalStockList = originalCell.textContent.split(' ');
-    const itemOriginalStock = parseInt(originalStockList[8]);
+    const itemOriginalStock = parseInt(originalCell.textContent);
 
     // gets the current stock position (value that is currently in that cell)
     const currentStock = parseInt(cellToChange.textContent);
