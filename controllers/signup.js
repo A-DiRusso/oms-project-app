@@ -1,4 +1,5 @@
 const User = require('../models/users');
+
 async function  createNewUser(req, res) {
     console.log(req.body);
     const newUser = await User.getByEmail(req.body.email);
