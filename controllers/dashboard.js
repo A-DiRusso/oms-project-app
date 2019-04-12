@@ -141,12 +141,11 @@ async function simulatePurchase(req, res) {
     
         await Item.adjustStock(-1, itemID);
         
-        console.log(`date: ${date}`);
+        // converts to UTC (London time)
         await Purchase.newPurchase(itemID, 2, 1, date.toISOString().slice(0, 10));
         // increment customer counter
         customerCounter++;
         // increment date
-        console.log(`next date: ${date}`);
         
       }
       
@@ -163,6 +162,7 @@ async function simulatePurchase(req, res) {
     const itemInstance = await Item.getByName(itemName);
 
     let day = 0;
+    const date = new Date();
 
     // keep loop going for each day
     while (day < numOfDays) {
@@ -176,15 +176,15 @@ async function simulatePurchase(req, res) {
     
         await Item.adjustStock(-1, itemID);
     
-        const date = '2019-04-10';
-    
-      
-      // 2. needs to create a record of the purchase in purchases table
-      
-        await Purchase.newPurchase(itemID, 2, 1, date);
+        
+        
+        // 2. needs to create a record of the purchase in purchases table
+        
+        await Purchase.newPurchase(itemID, 2, 1, date.toISOString().slice(0, 10));
         customerCounter++;
       }
-
+      
+      date.setDate(date.getDate() + 1);
       day++;
 
     }
@@ -215,10 +215,6 @@ async function simulatePurchase(req, res) {
       frequencyObject[id] = 1;
     }
   })
-
-  console.log('^^^^^^^^^^^^^^^^^^^^^^^');
-  console.log(frequencyObject);
-  console.log('^^^^^^^^^^^^^^^^^^^^^^^');
 
   // save total amount of purchases for first frequencyObject key in sessions
   req.session.purchaseTotals = frequencyObject;
@@ -268,10 +264,6 @@ async function clearTable(req, res) {
 async function createTable(req, res) {
   // needs to add each item entered in the form to sql table items
   // all form input is stored in req.body object
-  console.log('&&&&&&&&&&&&&&&&&&&&');
-  console.log(req.body.itemname.length);
-  console.log('&&&&&&&&&&&&&&&&&&&&');
-
   
 
   // if there is only one item being added
@@ -295,9 +287,6 @@ async function createTable(req, res) {
       itemObject.stock = req.body.stock[i];
       itemObject.locationid = req.body.locationid[i];
   
-      console.log('^^^^^^^^^^^^^^^^^^^')
-      console.log(itemObject);
-      console.log('^^^^^^^^^^^^^^^^^^^')
   
       await Item.addItem(itemObject);
   
@@ -318,8 +307,6 @@ async function createTableFurniture(req, res) {
 
   // create a bunch of preset objects for furniture;
   const furnitureArray = furniture();
-
-  console.log(furnitureArray);
 
   for (let i = 0; i < furnitureArray.length; i++) {
 
