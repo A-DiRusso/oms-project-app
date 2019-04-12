@@ -1,4 +1,5 @@
 const User = require('../models/users');
+
 async function  createNewUser(req, res) {
     console.log(req.body);
     const newUser = await User.getByEmail(req.body.email);
@@ -9,8 +10,12 @@ async function  createNewUser(req, res) {
 //save email to session
         req.session.email = req.body.email;
         req.session.save( async () => {
-            res.render('login',{locals:{message:"Please Log in",email:req.session.email}})
+            res.render('login',{
+                locals:{
+                    message: "Please Log in",
+                    email: req.session.email}})
         })
+        res.redirect('/');
 
 
     } else { //send them to login with email filled

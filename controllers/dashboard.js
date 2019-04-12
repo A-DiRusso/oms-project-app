@@ -1,7 +1,9 @@
 const Item = require('../models/items');
 const Purchase = require('../models/purchases');
+const User = require('../models/users');
 const furniture = require('../presets/furniture');
 const chipotle = require('../presets/chipotle');
+const blockbuster = require('../presets/blockbuster');
 
 
 
@@ -26,6 +28,7 @@ async function showDashboard(req, res) {
       const itemPurchaseTotal = purchaseTotals[item.id];
       // set background color to a variable
       let bgColor = '';
+      let txtColor = '';
       if (itemPurchaseTotal > 100) {
         bgColor = 'darker-red';
       // else if there are no purchase records for that item (nothing purchased yet)
@@ -38,34 +41,34 @@ async function showDashboard(req, res) {
         bgColor = 'bg-warning';
 
       } else if (!itemPurchaseTotal) {
-
-        bgColor = 'bg-secondary';
+        txtColor = 'text-secondary'
+        bgColor = 'bg-light';
       }
 
       return `
       <div class="row text-center text-white">
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.name}
       </div>
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.sku}
       </div>
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.leadTime}
       </div>
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.wholesale}
       </div>
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.retail}
       </div>
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.stock}
       </div>
-      <div data-simulated-stock class="col-sm border ${bgColor}">
+      <div data-simulated-stock class="col-sm border ${bgColor} ${txtColor}">
         ${item.simulatedStock}
       </div>
-      <div class="col-sm border bg-secondary">
+      <div class="col-sm border bg-light text-secondary">
         ${item.location_id}
       </div>
       </div>
@@ -82,6 +85,11 @@ async function showDashboard(req, res) {
        let sum = 0;
        let soldStockSum = 0;
        let profit = 0;
+       let userName = await User.getByEmail(req.session.email);
+       console.log('$$$$$$$$$$$$$$$$')
+       console.log(req.session)
+       console.log(userName)
+       console.log('$$$$$$$$$$$$$$$$')
 
        if (req.session.sum) {
           sum = req.session.sum;
@@ -115,7 +123,8 @@ async function showDashboard(req, res) {
               revenueTotal: sum,
               soldStockTotalCost: soldStockSum,
               profit: profit,
-              purchaseTotalsPerDay: purchaseTotalsHTML.join('')
+              purchaseTotalsPerDay: purchaseTotalsHTML.join(''),
+              name: userName
            }
        });
 }
@@ -371,6 +380,18 @@ async function createTableChipotle(req, res) {
   res.redirect('/');
 }
 
+async function createTableBlockbuster(req, res) {
+
+  const blockbusterArray = blockbuster();
+
+  for (let i = 0; i < blockbusterArray.length; i++) {
+
+    await Item.addItem(blockbusterArray[i]);
+
+  }
+  res.redirect('/');
+}
+
 module.exports = {
   showDashboard,
   simulatePurchase,
@@ -378,6 +399,7 @@ module.exports = {
   clearTable,
   createTable,
   createTableFurniture,
-  createTableChipotle
+  createTableChipotle,
+  createTableBlockbuster
 }
 

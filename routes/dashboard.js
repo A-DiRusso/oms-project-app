@@ -1,4 +1,5 @@
 const express = require('express');
+const ensureAuthenticated = require('../auth').ensureAuthenticated;
 
 const dashboardRouter =  express.Router();
 const {
@@ -8,10 +9,12 @@ const {
     clearTable,
     createTable,
     createTableFurniture,
-    createTableChipotle
+    createTableChipotle,
+    createTableBlockbuster
 } = require('../controllers/dashboard');
 
-dashboardRouter.get('/', showDashboard);
+dashboardRouter.get('/', //ensureAuthenticated,
+showDashboard);
 
 dashboardRouter.post('/buy', simulatePurchase);
 
@@ -24,5 +27,7 @@ dashboardRouter.post('/createtable', createTable);
 dashboardRouter.post('/furniture', createTableFurniture);
 
 dashboardRouter.post('/chipotle', createTableChipotle);
+
+dashboardRouter.post('/blockbuster', createTableBlockbuster);
 
 module.exports = dashboardRouter;

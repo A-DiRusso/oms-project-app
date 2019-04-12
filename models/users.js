@@ -11,17 +11,17 @@ class User {
         this.lastName = last_name;
     }
 
-    static getByEmail(email) {
-        return db.one(`SELECT * FROM users WHERE email=$1`, [email])
+    static getByEmail(company_email) {
+        return db.one(`SELECT * FROM users WHERE company_email=$1`, [company_email])
             .then((userData) => {
                 console.log(userData);
+
                 const userInstance = new User(userData.id, userData.company_email, userData.first_name, userData.last_name);
-                
+                console.log("+++++++++++++++++")
+                console.log(userInstance)
                 return userInstance;
             })
-            .catch((error) => {
-                return null;
-            });
+            .catch(err => err)
     }
     save() {
         //db.result - gives you the number of rows affected
@@ -30,7 +30,7 @@ class User {
                     password = '${this.password}',
                     first_name = '${this.firstName}',
                     last_name = '${this.lastName}'
-                     where id = ${this.id}`);
+                    where id = ${this.id}`);
     }
     static insertUser (companyEmail, password, firstName, lastName) {
         return db.result(`insert into users
@@ -44,7 +44,7 @@ class User {
         return bcrypt.hashSync(password, 10);  //10 is my salt
     }
     checkPassword(password) {
-        return bcrypt.compareSync(password,this.password);
+        return bcrypt.compareSync(password, this.password);
     }
 
 }
