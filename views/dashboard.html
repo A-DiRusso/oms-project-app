@@ -16,8 +16,7 @@
 <body>
     <section class="text-center">
         <div class="container">
-          <h1 class="jumbotron-heading mb-5">Welcome to your OMS App.  <br>
-            Project By Eric, Eric, and Tony llc.</h1>
+          <h1 class="jumbotron-heading mb-5">Welcome to your OMS App., ${userName}!</h1>
             <button class="btn btn-secondary mb-2 d-block"><a href="/login">Log Out</a></button>
         </div>
       </section>
@@ -29,7 +28,7 @@
             <form action="/furniture" method="POST"><button class="dropdown-item">Furniture</button></form>
             <form action="/chipotle" method="POST"><button class="dropdown-item">Chipotle</button></form>
             <form action="/blockbuster" method="POST"><button class="dropdown-item">Blockbuster</button></form>
-     
+    
           </div>
         </div>
 
@@ -127,36 +126,7 @@ aria-hidden="true">
     </table>
 
   </div>
-  <!-- <div class="container">
-    <div class="row text-center text-white">
-      <div class="col-sm border bg-secondary">
-        Item
-      </div>
-      <div class="col-sm border bg-secondary">
-        SKU
-      </div>
-      <div class="col-sm border bg-secondary">
-        Lead Time
-      </div>
-      <div class="col-sm border bg-secondary">
-        Wholesale
-      </div>
-      <div class="col-sm border bg-secondary">
-        Retail
-      </div>
-      <div class="col-sm border bg-secondary">
-        Original Stock
-      </div>
-      <div class="col-sm border bg-secondary">
-        Simulated Stock
-      </div>
-      <div class="col-sm border bg-secondary">
-        Location_id
-      </div>
-      </div>
-      ${items}
 
-  </div> -->
 
   <div class="slider-container container d-flex justify-content-center mt-5">
     <h3>Day 0</h3>
@@ -214,11 +184,11 @@ aria-hidden="true">
       <button type="submit">Reset Simulation</button>
     </form>
 
-<div class="container mt-5">
-  <h2>Simulated Data</h2>
-  <h5>Revenue: ${revenueTotal}</h5>
-  <h5>Cost of Outgoing Stock: ${soldStockTotalCost} </h5>
-  <h5>Profits: ${profit}</h5>
+<div class="container my-5">
+  <h2 class="simulated-data">Simulated Data</h2>
+  <h5 class="simulated-data">Revenue: ${revenueTotal}</h5>
+  <h5 class="simulated-data">Cost of Outgoing Stock: ${soldStockTotalCost} </h5>
+  <h5 class="simulated-data">Profits: ${profit}</h5>
   
 
 </div>
