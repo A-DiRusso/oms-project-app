@@ -8,6 +8,7 @@ const path = require('path');
 
 const helmet = require('helmet');
 app.use(helmet());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.urlencoded({ extended: false}));
 const es6Renderer = require('express-es6-template-engine');
@@ -36,7 +37,6 @@ setupAuth(app);
 app.use('/login', loginRouter);
 app.use('/signup', signUpRouter);
 
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/',dashboardRouter);
 

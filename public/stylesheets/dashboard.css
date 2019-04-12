@@ -17,3 +17,22 @@
     background-color: rgb(232, 139, 116);
 
 }
+
+.slider-container {
+
+    width: 100%;
+}
+
+.slider {
+    opacity: .7;
+    width: 75%
+}
+
+.slider:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.tickmarks {
+    display: block;
+}

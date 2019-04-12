@@ -45,6 +45,7 @@
   <div class="container d-flex justify-content-center">
     ${additems}
   </div>
+
   <!-- Modal -->
 <div class="modal fade" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
@@ -142,6 +143,23 @@ aria-hidden="true">
       </div>
       ${items}
 
+  </div>
+
+  <div class="slider-container container d-flex justify-content-center mt-5">
+    <h3>Day 1</h3>
+    <input type="range" min="1" max="5" value="5" list="tickmarks" class="slider" id="myRange">
+    <h3>Day 5</h3>
+    <datalist id="tickmarks">
+      <option value="1" label="1">
+        <option value="2">
+        <option value="3">
+        <option value="4">
+        <option value="5" label="5">
+    </datalist>
+  </div>
+
+  <div data-hidden-purchases class="hidden-purchases d-none">
+    ${purchaseTotalsPerDay}
   </div>
 
 

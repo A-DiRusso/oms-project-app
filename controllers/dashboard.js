@@ -45,10 +45,6 @@ async function showDashboard(req, res) {
         bgColor = 'bg-light';
       }
 
-      console.log('&&&&&&&&&&&&&&&&&');
-      console.log(itemPurchaseTotal);
-      console.log('&&&&&&&&&&&&&&&&&');
-
       return `
       <div class="row text-center text-white">
       <div class="col-sm border bg-light text-secondary">
@@ -69,7 +65,7 @@ async function showDashboard(req, res) {
       <div class="col-sm border bg-light text-secondary">
         ${item.stock}
       </div>
-      <div class="col-sm border ${bgColor} ${txtColor}">
+      <div data-simulated-stock class="col-sm border ${bgColor} ${txtColor}">
         ${item.simulatedStock}
       </div>
       <div class="col-sm border bg-light text-secondary">
@@ -105,6 +101,20 @@ async function showDashboard(req, res) {
           profit = '';
        }
 
+       
+       const purchaseTotalsHTML = [];
+       if (req.session.purchaseTotalsPerDay) {
+
+         const purchaseTotalsPerDay = req.session.purchaseTotalsPerDay;
+         for (let date in purchaseTotalsPerDay) {
+          const purchaseInfo = `<h3>${date}: ${purchaseTotalsPerDay[date]}</h3>`
+          purchaseTotalsHTML.push(purchaseInfo);
+         }
+
+       }
+
+       console.log(purchaseTotalsHTML);
+
        res.render('dashboard', {
            locals: {
               additems: addItemsButton,
@@ -113,6 +123,7 @@ async function showDashboard(req, res) {
               revenueTotal: sum,
               soldStockTotalCost: soldStockSum,
               profit: profit,
+              purchaseTotalsPerDay: purchaseTotalsHTML.join(''),
               name: userName
            }
        });
@@ -205,6 +216,9 @@ async function simulatePurchase(req, res) {
 
   // get all purchases to see which items have decreased in inventory
   const allPurchases = await Purchase.getAll();
+  console.log('$$$$$$$$$$$$$$$$$$$$$')
+  console.log(allPurchases);
+  console.log('$$$$$$$$$$$$$$$$$$$$$')
 
   // isolate just the item IDs
   const allPurchasedItems = allPurchases.map(purchase => {
@@ -225,8 +239,33 @@ async function simulatePurchase(req, res) {
     }
   })
 
+  // isolate just the dates
+  const purchasesPerDate = allPurchases.map(purchase => {
+    const purchaseDate = purchase.purchaseDate.toISOString().slice(0, 10)
+    return purchaseDate;
+
+  })
+
+  console.log(purchasesPerDate);
+
+  const purchaseTotalsPerDay = {};
+
+  purchasesPerDate.forEach(date => {
+    if (purchaseTotalsPerDay[date]) {
+      purchaseTotalsPerDay[date] += 1
+    } else {
+      purchaseTotalsPerDay[date] = 1;
+    }
+  })
+
+  console.log(purchaseTotalsPerDay);
+
+
+
+
   // save total amount of purchases for first frequencyObject key in sessions
   req.session.purchaseTotals = frequencyObject;
+  req.session.purchaseTotalsPerDay = purchaseTotalsPerDay;
 
   // retrieve sum of sold stock costs for the day
   let soldStockSum = await Purchase.sumSoldStockCost()
@@ -242,6 +281,7 @@ async function resetSim(req, res) {
   await Purchase.deleteAll();
   req.session.sum = '';
   req.session.purchaseTotals = {};
+  req.session.purchaseTotalsPerDay = '';
 
   req.session.soldStockSum = '';
   req.session.save();
