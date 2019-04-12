@@ -2,6 +2,9 @@ const simulateButton = document.querySelector('[data-simulate]');
 const waitingDiv = document.querySelector('[data-waiting]');
 const addItemButton = document.querySelector('[data-add-item]');
 const moreItemsDiv = document.querySelector('[data-more-items]');
+const slider = document.querySelector('.slider');
+const purchasesDiv = document.querySelector('[data-hidden-purchases');
+const simulatedCells = document.querySelectorAll('[data-simulated-stock]');
 
 const allDivs = document.querySelectorAll('div');
 
@@ -76,5 +79,41 @@ addItemButton.addEventListener('click', function() {
     `;
     moreItemsDiv.append(newItemDiv);
 
+
+})
+
+slider.addEventListener('change', function() {
+
+    // what day user is on
+    let day = slider.value;
+
+    console.log(day);
+
+    // isolates the purchase total for that day from the purchase totals div
+    const purchaseTotal = purchasesDiv.childNodes[day].textContent.split(' ')[1];
+
+    // isolates the cell that needs to be changed
+    const cellToChange = simulatedCells[0];
+
+    // gets the current stock position (value that is currently in that cell)
+    const currentStock = parseInt(cellToChange.textContent);
+
+    // changes the value to reflect the previous day's stock position
+
+    // if the previous day selected on the slider is earlier on in time (less than)
+    if (allChanges[allChanges.length - 2] < allChanges[allChanges.length -1]) {
+
+        cellToChange.textContent = currentStock + parseInt(purchaseTotal);
+    }
+
+})
+
+const allChanges = [];
+
+slider.addEventListener('change', function() {
+
+    allChanges.push(slider.value);
+
+    console.log(allChanges);
 
 })
