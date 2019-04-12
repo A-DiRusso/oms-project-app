@@ -133,12 +133,14 @@ async function simulatePurchase(req, res) {
     const numberOfItems = allItems.length;
 
     let day = 0;
+    const date = new Date();
 
     // keep loop going for each day
     while (day < numOfDays) {
 
 
       let customerCounter = 0;
+
       // while customers coming in is still less than user entered total customers per day
       while (customerCounter < req.body.customerCount) {
         const randomItem = allItems[Math.floor(numberOfItems * Math.random())];
@@ -147,12 +149,16 @@ async function simulatePurchase(req, res) {
         const itemID = itemInstance.id;
     
         await Item.adjustStock(-1, itemID);
-    
-        const date = '2019-04-10';
-        await Purchase.newPurchase(itemID, 2, 1, date);
+        
+        // converts to UTC (London time)
+        await Purchase.newPurchase(itemID, 2, 1, date.toISOString().slice(0, 10));
+        // increment customer counter
         customerCounter++;
+        // increment date
+        
       }
-
+      
+      date.setDate(date.getDate() + 1);
       day++;
 
     }
@@ -165,6 +171,7 @@ async function simulatePurchase(req, res) {
     const itemInstance = await Item.getByName(itemName);
 
     let day = 0;
+    const date = new Date();
 
     // keep loop going for each day
     while (day < numOfDays) {
@@ -178,15 +185,15 @@ async function simulatePurchase(req, res) {
     
         await Item.adjustStock(-1, itemID);
     
-        const date = '2019-04-10';
-    
-      
-      // 2. needs to create a record of the purchase in purchases table
-      
-        await Purchase.newPurchase(itemID, 2, 1, date);
+        
+        
+        // 2. needs to create a record of the purchase in purchases table
+        
+        await Purchase.newPurchase(itemID, 2, 1, date.toISOString().slice(0, 10));
         customerCounter++;
       }
-
+      
+      date.setDate(date.getDate() + 1);
       day++;
 
     }
@@ -217,10 +224,6 @@ async function simulatePurchase(req, res) {
       frequencyObject[id] = 1;
     }
   })
-
-  console.log('^^^^^^^^^^^^^^^^^^^^^^^');
-  console.log(frequencyObject);
-  console.log('^^^^^^^^^^^^^^^^^^^^^^^');
 
   // save total amount of purchases for first frequencyObject key in sessions
   req.session.purchaseTotals = frequencyObject;
@@ -270,29 +273,36 @@ async function clearTable(req, res) {
 async function createTable(req, res) {
   // needs to add each item entered in the form to sql table items
   // all form input is stored in req.body object
+  
 
-  console.log(req.body);
+  // if there is only one item being added
+  if (typeof req.body.itemname === 'string') {
 
-  // loop through however many items user wants to add
-  for (let i = 0; i < req.body.itemname.length; i++) {
-
-    const itemObject = {};
-
-    itemObject.itemname = req.body.itemname[i];
-    itemObject.sku = req.body.sku[i];
-    itemObject.leadtime = req.body.leadtime[i];
-    itemObject.wholesale = req.body.wholesale[i];
-    itemObject.retail = req.body.retail[i];
-    itemObject.stock = req.body.stock[i];
-    itemObject.locationid = req.body.locationid[i];
-
-    console.log('^^^^^^^^^^^^^^^^^^^')
-    console.log(itemObject);
-    console.log('^^^^^^^^^^^^^^^^^^^')
-
+    const itemObject = req.body;
     await Item.addItem(itemObject);
 
+  } else {
+
+    // loop through however many items user wants to add
+    for (let i = 0; i < req.body.itemname.length; i++) {
+  
+      const itemObject = {};
+  
+      itemObject.itemname = req.body.itemname[i];
+      itemObject.sku = req.body.sku[i];
+      itemObject.leadtime = req.body.leadtime[i];
+      itemObject.wholesale = req.body.wholesale[i];
+      itemObject.retail = req.body.retail[i];
+      itemObject.stock = req.body.stock[i];
+      itemObject.locationid = req.body.locationid[i];
+  
+  
+      await Item.addItem(itemObject);
+  
+    }
+
   }
+
 
 
   // const itemObject = req.body;
@@ -306,8 +316,6 @@ async function createTableFurniture(req, res) {
 
   // create a bunch of preset objects for furniture;
   const furnitureArray = furniture();
-
-  console.log(furnitureArray);
 
   for (let i = 0; i < furnitureArray.length; i++) {
 

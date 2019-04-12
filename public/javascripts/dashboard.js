@@ -3,6 +3,28 @@ const waitingDiv = document.querySelector('[data-waiting]');
 const addItemButton = document.querySelector('[data-add-item]');
 const moreItemsDiv = document.querySelector('[data-more-items]');
 
+const allDivs = document.querySelectorAll('div');
+
+allDivs.forEach(div => {
+
+    div.addEventListener('mouseover', function() {
+
+        if (div.classList[2] === 'bg-danger' || div.classList[2] === 'bg-warning' || div.classList[2] === 'darker-red') {
+            div.style.opacity = '.5';
+        }
+
+    })
+    div.addEventListener('mouseout', function() {
+
+        if (div.classList[2] === 'bg-danger' || div.classList[2] === 'bg-warning' || div.classList[2] === 'darker-red') {
+            div.style.opacity = '1';
+        }
+
+    })
+
+
+})
+
 
 simulateButton.addEventListener('click', function() {
 
