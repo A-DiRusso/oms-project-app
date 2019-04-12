@@ -124,12 +124,14 @@ async function simulatePurchase(req, res) {
     const numberOfItems = allItems.length;
 
     let day = 0;
+    const date = new Date();
 
     // keep loop going for each day
     while (day < numOfDays) {
 
 
       let customerCounter = 0;
+
       // while customers coming in is still less than user entered total customers per day
       while (customerCounter < req.body.customerCount) {
         const randomItem = allItems[Math.floor(numberOfItems * Math.random())];
@@ -139,12 +141,16 @@ async function simulatePurchase(req, res) {
     
         await Item.adjustStock(-1, itemID);
         
-        // ********* HARDCODED DATE ***********
-        const date = '2019-04-10';
-        await Purchase.newPurchase(itemID, 2, 1, date);
+        console.log(`date: ${date}`);
+        await Purchase.newPurchase(itemID, 2, 1, date.toISOString().slice(0, 10));
+        // increment customer counter
         customerCounter++;
+        // increment date
+        console.log(`next date: ${date}`);
+        
       }
-
+      
+      date.setDate(date.getDate() + 1);
       day++;
 
     }
@@ -273,7 +279,7 @@ async function createTable(req, res) {
 
     const itemObject = req.body;
     await Item.addItem(itemObject);
-    
+
   } else {
 
     // loop through however many items user wants to add
