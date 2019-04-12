@@ -1,4 +1,5 @@
 const express = require('express');
+const ensureAuthenticated = require('../auth').ensureAuthenticated;
 
 const dashboardRouter =  express.Router();
 const {
@@ -11,7 +12,8 @@ const {
     createTableChipotle
 } = require('../controllers/dashboard');
 
-dashboardRouter.get('/', showDashboard);
+dashboardRouter.get('/', //ensureAuthenticated,
+showDashboard);
 
 dashboardRouter.post('/buy', simulatePurchase);
 
