@@ -1,8 +1,14 @@
 const User = require('../models/users');
 
 function showLoginPage (req, res) {
-    res.render('login',{locals:{email:'tswift@1984.com',message:'Please Log In'}});
+    res.render('login',{
+        locals:{
+            email:'',
+            message:''
+            
+    }});
 }
+
 
 async function verifyUser  (req, res) {
     //set session email
@@ -17,18 +23,10 @@ async function verifyUser  (req, res) {
             res.redirect('/signup');
         } else {
                 res.redirect('/');
-                
-
+               
         }
-    });
-
-    
+    });    
 }
-
-
-
-
-
 
 module.exports =  {showLoginPage, verifyUser} ;
 

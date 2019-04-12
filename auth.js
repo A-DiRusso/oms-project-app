@@ -75,7 +75,8 @@ const setupAuth = (app) => {
   app.use(passport.session());
 
   // #8 register our login, logout, and auth routes
-  app.get('/githubauth', passport.authenticate('github'));
+  app.get('/login/github/auth', passport.authenticate('github'));
+
 
   app.get('/logout', function(req, res, next) {
     console.log('logging out');
@@ -124,6 +125,7 @@ const ensureAuthenticated = (req, res, next) => {
   console.log('clearly, they are not authenticated');
   // denied. redirect to login
   res.redirect('/login');
+  res.render('you must login to continue')
 }
 
 // Our default export is the `setupAuth` function.
