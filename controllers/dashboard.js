@@ -3,6 +3,7 @@ const Purchase = require('../models/purchases');
 const User = require('../models/users');
 const furniture = require('../presets/furniture');
 const chipotle = require('../presets/chipotle');
+const blockbuster = require('../presets/blockbuster');
 
 
 
@@ -331,6 +332,18 @@ async function createTableChipotle(req, res) {
   res.redirect('/');
 }
 
+async function createTableBlockbuster(req, res) {
+
+  const blockbusterArray = blockbuster();
+
+  for (let i = 0; i < blockbusterArray.length; i++) {
+
+    await Item.addItem(blockbusterArray[i]);
+
+  }
+  res.redirect('/');
+}
+
 module.exports = {
   showDashboard,
   simulatePurchase,
@@ -338,6 +351,7 @@ module.exports = {
   clearTable,
   createTable,
   createTableFurniture,
-  createTableChipotle
+  createTableChipotle,
+  createTableBlockbuster
 }
 

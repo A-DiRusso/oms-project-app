@@ -77,6 +77,7 @@ const setupAuth = (app) => {
   // #8 register our login, logout, and auth routes
   app.get('/login/github/auth', passport.authenticate('github'));
 
+
   app.get('/logout', function(req, res, next) {
     console.log('logging out');
     req.logout();
