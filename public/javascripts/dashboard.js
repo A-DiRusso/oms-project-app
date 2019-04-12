@@ -5,6 +5,8 @@ const moreItemsDiv = document.querySelector('[data-more-items]');
 const slider = document.querySelector('.slider');
 const purchasesDiv = document.querySelector('[data-hidden-purchases');
 const simulatedCells = document.querySelectorAll('[data-simulated-stock]');
+const modifiedCell = document.querySelector('[data-modified]');
+const originalCell = document.querySelector('[data-sim-modified]');
 const originalStockCells = document.querySelectorAll('[data-original-stock]');
 
 const allDivs = document.querySelectorAll('div');
@@ -112,9 +114,11 @@ function pullDateFromSlider() {
 function findDailyPurchaseTotals(day) {
 
     // isolate cell that contains original stock for that item
-    const originalStockCell = originalStockCells[0];
+    console.log(modifiedCell);
+    console.log(originalCell);
+    const originalStockCell = originalCell;
     // isolate cell that contains simulated stock
-    const cellToChange = simulatedCells[0];
+    const cellToChange = modifiedCell;
 
     // previous day is day that slider was on right before current day
     const previousDay = allChanges[allChanges.length - 2];
@@ -189,31 +193,33 @@ function findDailyPurchaseTotals(day) {
 
 }
 
-function findCells() {
+// function findCells() {
 
-    // isolates the cell that needs to be changed
-    const cellToChange = simulatedCells[0];
-    const originalStockCell = originalStockCells[0];
+//     // isolates the cell that needs to be changed
+//     const cellToChange = modifiedCell;
+//     const originalStockCell = originalCell;
 
-    const targetedCells = {
-        cellToChange: cellToChange,
-        originalStockCell: originalStockCell
-    }   
+//     const targetedCells = {
+//         cellToChange: cellToChange,
+//         originalStockCell: originalStockCell
+//     }   
 
-    return targetedCells;
+//     return targetedCells;
 
-}
+// }
 
 function changeCellValue(dailyPurchaseTotal, day) {
 
-    const targetedCells = findCells();
+    const cellToChange = modifiedCell;
+    // const originalStockCell = originalCell;
 
-    const cellToChange = targetedCells.cellToChange;
+    // const targetedCells = findCells();
+
+    // const cellToChange = targetedCells.cellToChange;
 
     // gets the current stock position (value that is currently in that cell)
     const currentStock = parseInt(cellToChange.textContent);
-
-    // 
+ 
     cellToChange.textContent = currentStock + dailyPurchaseTotal;
 
 }

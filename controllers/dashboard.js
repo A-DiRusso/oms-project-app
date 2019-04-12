@@ -30,17 +30,25 @@ async function showDashboard(req, res) {
       // set background color to a variable
       let bgColor = '';
       let txtColor = '';
+      let modified = '';
+      let simModified = '';
       if (itemPurchaseTotal > 100) {
         bgColor = 'darker-red';
         txtColor = 'text-light';
+        modified = 'data-modified';
+        simModified = 'data-sim-modified'
       // else if there are no purchase records for that item (nothing purchased yet)
       } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
       
         bgColor = 'bg-danger';
+        modified = 'data-modified';
+        simModified = 'data-sim-modified';
       
       } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
-        bgColor = 'bg-warning'
+        bgColor = 'bg-warning';
+        modified = 'data-modified';
+        simModified = 'data-sim-modified';
 
       } else if (!itemPurchaseTotal) {
         // txtColor = 'text-secondary'
@@ -54,8 +62,8 @@ async function showDashboard(req, res) {
         <td class="border">${item.leadTime}</td>
         <td class="border">${item.wholesale}</td>
         <td class="border">${item.retail}</td>
-        <td data-original-stock class="border">${item.stock}</td>
-        <td data-simulated-stock class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
+        <td data-original-stock ${simModified} class="border">${item.stock}</td>
+        <td data-simulated-stock ${modified} class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
         <td class="border">${item.location_id}</td>
       </tr>
       `
