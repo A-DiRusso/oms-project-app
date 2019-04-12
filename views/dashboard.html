@@ -114,7 +114,27 @@ aria-hidden="true">
 
 
   </div>
-  <div class="container">
+  <div class="table-responsive-sm">
+    <table class="table table-hover container text-center border-light">
+        <thead class="bg-secondary text-white">
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">SKU</th>
+            <th scope="col">Lead Time</th>
+            <th scope="col">Wholesale</th>
+            <th scope="col">Retail</th>
+            <th scope="col">Original Stock</th>
+            <th scope="col">Simulated Stock</th>
+            <th scope="col">Location ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items}
+        </tbody>
+    </table>
+
+  </div>
+  <!-- <div class="container">
     <div class="row text-center text-white">
       <div class="col-sm border bg-secondary">
         Item
@@ -143,7 +163,7 @@ aria-hidden="true">
       </div>
       ${items}
 
-  </div>
+  </div> -->
 
   <div class="slider-container container d-flex justify-content-center mt-5">
     <h3>Day 0</h3>
