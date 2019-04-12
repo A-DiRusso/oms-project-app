@@ -8,7 +8,8 @@ const {
     clearTable,
     createTable,
     createTableFurniture,
-    createTableChipotle
+    createTableChipotle,
+    createTableBlockbuster
 } = require('../controllers/dashboard');
 
 dashboardRouter.get('/', showDashboard);
@@ -24,5 +25,7 @@ dashboardRouter.post('/createtable', createTable);
 dashboardRouter.post('/furniture', createTableFurniture);
 
 dashboardRouter.post('/chipotle', createTableChipotle);
+
+dashboardRouter.post('/blockbuster', createTableBlockbuster);
 
 module.exports = dashboardRouter;
