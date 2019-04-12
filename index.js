@@ -4,6 +4,8 @@ const express = require('express');
 const PORT =process.env.PORT;
 const app = express();
 const path = require('path');
+// const escape = require('escape-html');
+// const html = escape('a string foo & bar');
 
 
 const helmet = require('helmet');
