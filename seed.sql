@@ -13,7 +13,12 @@ VALUES
 insert into locations
 (location_name)
 VALUES
-('Nome, AK');
+('Nome, AK'),
+('Bend, OR'),
+('Buckhead, GA'),
+('New York, NY'),
+('Los Angles, CA')
+;
 
 insert into items
 (name, sku, lead_time, wholesale, retail, stock, simulated_stock, location_id)
