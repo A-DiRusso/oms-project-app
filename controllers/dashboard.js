@@ -54,8 +54,8 @@ async function showDashboard(req, res) {
         <td class="border">${item.leadTime}</td>
         <td class="border">${item.wholesale}</td>
         <td class="border">${item.retail}</td>
-        <td class="border">${item.stock}</td>
-        <td class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
+        <td data-original-stock class="border">${item.stock}</td>
+        <td data-simulated-stock class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
         <td class="border">${item.location_id}</td>
       </tr>
       `
