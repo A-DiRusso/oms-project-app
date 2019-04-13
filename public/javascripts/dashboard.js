@@ -1,3 +1,5 @@
+
+
 const simulateButton = document.querySelector('[data-simulate]');
 const waitingDiv = document.querySelector('[data-waiting]');
 const addItemButton = document.querySelector('[data-add-item]');
@@ -9,6 +11,7 @@ const modifiedCell = document.querySelector('[data-modified]');
 const originalCell = document.querySelector('[data-sim-modified]');
 const originalStockCells = document.querySelectorAll('[data-original-stock]');
 const whatDayDiv = document.querySelector('[data-what-day]');
+const resetButton = document.querySelector('[data-reset-sim]');
 
 const allDivs = document.querySelectorAll('div');
 
@@ -36,6 +39,9 @@ allDivs.forEach(div => {
 simulateButton.addEventListener('click', function() {
 
     console.log('button clicked');
+    localStorage.clear();
+
+
 
     const h2 = document.createElement('h2');
     h2.textContent = 'Calculating....';
@@ -115,24 +121,187 @@ function pullDateFromSlider() {
     // push the current day user is on the allChanges
     allChanges.push(day);
 
-    findDailyPurchaseTotals(day);
+    calculatePurchaseTotals(day);
 
 
 }
 
-function findDailyPurchaseTotals(day) {
+// function findDailyPurchaseTotals(day) {
 
-    // isolate cell that contains original stock for that item
-    console.log(modifiedCell);
-    console.log(originalCell);
+//     // isolate cell that contains original stock for that item
+//     const originalStockCell = originalCell;
+//     // isolate cell that contains simulated stock
+//     const cellToChange = modifiedCell;
+
+//     // previous day is day that slider was on right before current day
+//     const previousDay = allChanges[allChanges.length - 2];
+//     console.log(previousDay);
+//     // negative number if user is going forwards in time (further from day 0) right direction on slider
+
+
+//     // pull everything out of local storage and put into an array of objects
+//     const allPurchases = [];
+
+//     const purchaseRecordsArray = Object.keys(localStorage);
+
+//     purchaseRecordsArray.forEach(record => {
+//         const purchaseObj = {};
+
+//         purchaseObj['purchase'] = JSON.parse(localStorage.getItem(record));
+//         allPurchases.push(purchaseObj);
+
+//     })
+
+//     console.log(allPurchases[0].purchase);
+
+//     const purchasesPerDay = {};
+
+//     allPurchases.forEach(purchaseRecord => {
+//         if (purchasesPerDay[purchaseRecord.purchase.date]) {
+//             purchasesPerDay[purchaseRecord.purchase.date] += 1
+//         } else {
+//             purchasesPerDay[purchaseRecord.purchase.date] = 1;
+//         }
+
+//     })
+//     // {The Lion King: 4}
+//     console.log(purchasesPerDay);
+
+    
+
+
+
+
+
+//     const allActiveDaysArray = [];
+
+//     // if user moved backwards in time (left direction on slider, got closer to day 0)
+//     if (previousDay > day) {
+
+//         // this for loop works only if user is going backwards in time (left direction on slider)
+//         for (let i = previousDay - 1; i >= day; i--) {
+    
+//             allActiveDaysArray.push(i);
+    
+    
+//         }
+//         let allDaysPurchaseTotal = 0;
+    
+//         // for each day in the days array
+//         allActiveDaysArray.forEach(day => {
+    
+//             let dayPurchaseTotal = 0;
+    
+//             // if loop is on day 0
+//             if (day === 0) {
+//                 // purchase total for day 0 (which is implied) is original stock - all days total
+//                 dayPurchaseTotal = parseInt(originalStockCell.textContent) - allDaysPurchaseTotal - parseInt(cellToChange.textContent);
+//                 console.log(`Day 0 purchase total: ${dayPurchaseTotal}`);
+    
+//             } else {
+//                 // need to change this so it reads from localStorage
+//                 dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+    
+//             }
+//             // calculate number of purchases on that day for each item and add to total
+//             allDaysPurchaseTotal += dayPurchaseTotal
+//         });
+    
+//         console.log(allDaysPurchaseTotal);
+    
+//         changeCellValue(allDaysPurchaseTotal, day);
+
+
+
+//     // if user moved forwards in time (right direction on slider, got closer to last simulated day)
+//     } else if (previousDay < day) {
+        
+//         for (let i = previousDay + 1; i <= day; i++) {
+    
+//             allActiveDaysArray.push(i);
+    
+    
+//         }
+
+//         let allDaysPurchaseTotal = 0;
+
+//         allActiveDaysArray.forEach(day => {
+
+//             let dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+
+//             allDaysPurchaseTotal -= dayPurchaseTotal;
+
+//         })
+
+//         console.log(allDaysPurchaseTotal)
+
+//         changeCellValue(allDaysPurchaseTotal, day);
+
+//     }
+
+// }
+
+function calculatePurchaseTotals(day) {
+
     const originalStockCell = originalCell;
-    // isolate cell that contains simulated stock
     const cellToChange = modifiedCell;
-
+    
     // previous day is day that slider was on right before current day
     const previousDay = allChanges[allChanges.length - 2];
-    console.log(previousDay);
+    // console.log(previousDay);
     // negative number if user is going forwards in time (further from day 0) right direction on slider
+
+
+    // pull everything out of local storage and put into an array of objects
+    const allPurchases = [];
+
+    const purchaseRecordsArray = Object.keys(localStorage);
+
+    purchaseRecordsArray.forEach(record => {
+        const purchaseObj = {};
+
+        purchaseObj['purchase'] = JSON.parse(localStorage.getItem(record));
+        allPurchases.push(purchaseObj);
+
+    })
+
+    // console.log(allPurchases[0].purchase);
+
+    const purchasesPerDay = {};
+
+    allPurchases.forEach(purchaseRecord => {
+        if (purchasesPerDay[purchaseRecord.purchase.date]) {
+            purchasesPerDay[purchaseRecord.purchase.date] += 1
+        } else {
+            purchasesPerDay[purchaseRecord.purchase.date] = 1;
+        }
+
+    })
+    // {The Lion King: 4}
+
+    const startDate = new Date();
+
+    const numOfDaysToSimulate = parseInt(slider.getAttribute('max'));
+
+    let count = 2;
+
+    const datesObject = {1: startDate.toISOString().slice(0, 10)};
+
+    for (let i = 0; i < numOfDaysToSimulate - 1; i++) {
+
+        startDate.setDate(startDate.getDate() + 1);
+        const nextDate = startDate.toISOString().slice(0, 10);
+
+        datesObject[count] = nextDate;
+
+        count++
+
+    }
+
+    // console.log(datesObject);
+    // console.log(purchasesPerDay);
+
+    // console.log(purchasesPerDay[datesObject[1]]);
 
     const allActiveDaysArray = [];
 
@@ -146,6 +315,7 @@ function findDailyPurchaseTotals(day) {
     
     
         }
+
         let allDaysPurchaseTotal = 0;
     
         // for each day in the days array
@@ -157,30 +327,26 @@ function findDailyPurchaseTotals(day) {
             if (day === 0) {
                 // purchase total for day 0 (which is implied) is original stock - all days total
                 dayPurchaseTotal = parseInt(originalStockCell.textContent) - allDaysPurchaseTotal - parseInt(cellToChange.textContent);
-                console.log(`Day 0 purchase total: ${dayPurchaseTotal}`);
+                // console.log(`Day 0 purchase total: ${dayPurchaseTotal}`);
     
             } else {
-    
-                dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+                // need to change this so it reads from localStorage
+                // dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+                dayPurchaseTotal = purchasesPerDay[datesObject[day]];
     
             }
             // calculate number of purchases on that day for each item and add to total
             allDaysPurchaseTotal += dayPurchaseTotal
         });
     
-        console.log(allDaysPurchaseTotal);
+        // console.log(allDaysPurchaseTotal);
     
         changeCellValue(allDaysPurchaseTotal, day);
-
-
-
-    // if user moved forwards in time (right direction on slider, got closer to last simulated day)
     } else if (previousDay < day) {
         
         for (let i = previousDay + 1; i <= day; i++) {
     
             allActiveDaysArray.push(i);
-    
     
         }
 
@@ -188,19 +354,22 @@ function findDailyPurchaseTotals(day) {
 
         allActiveDaysArray.forEach(day => {
 
-            let dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+            // let dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
+            let dayPurchaseTotal = purchasesPerDay[datesObject[day]];
 
             allDaysPurchaseTotal -= dayPurchaseTotal;
 
         })
 
-        console.log(allDaysPurchaseTotal)
+        // console.log(allDaysPurchaseTotal)
 
         changeCellValue(allDaysPurchaseTotal, day);
 
     }
 
+
 }
+
 
 function changeCellValue(dailyPurchaseTotal, day) {
 
@@ -221,7 +390,7 @@ function changeCellValue(dailyPurchaseTotal, day) {
 
     // change colors according to inventory level
     if (originalStockValue - cellToChange.textContent > 100) {
-        console.log('this is running');
+        // console.log('this is running');
         cellToChange.classList.add('darker-red');
         cellToChange.classList.add('text-light');
     } else if (originalStockValue - cellToChange.textContent > 50 && originalStockValue - cellToChange.textContent <= 100) {
@@ -236,5 +405,24 @@ function changeCellValue(dailyPurchaseTotal, day) {
     }
 
 
-
+    
 }
+
+function getPurchaseRecords() {
+
+
+    fetch('/purchaserecords')
+    .then(function(response) {
+        return response.json()
+    })
+    .then(purchaseData => {
+        let count = 0;
+        purchaseData.forEach(purchase => {
+            localStorage.setItem(`purchase #${count}`, purchase);
+            count++;
+        })
+    })
+}
+
+getPurchaseRecords();
+

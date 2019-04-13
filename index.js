@@ -39,7 +39,6 @@ setupAuth(app);
 app.use('/login', loginRouter);
 app.use('/signup', signUpRouter);
 
-
 app.use('/',dashboardRouter);
 
 // app.all('*',(req, res) => {

@@ -80,10 +80,6 @@ async function showDashboard(req, res) {
        let soldStockSum = 0;
        let profit = 0;
        let userName = await User.getByEmail(req.session.email);
-       console.log('$$$$$$$$$$$$$$$$')
-       console.log(req.session)
-       console.log(userName.firstName)
-       console.log('$$$$$$$$$$$$$$$$')
 
        if (req.session.sum) {
           sum = req.session.sum;
@@ -107,7 +103,6 @@ async function showDashboard(req, res) {
 
        }
 
-       console.log(purchaseTotalsHTML);
        let maxDayHTML = '';
        let maxValue = '';
        let startValue = '';
@@ -138,6 +133,51 @@ async function showDashboard(req, res) {
       //   res.redirect('/login');
       // }
  
+}
+
+async function sendPurchaseRecords(req, res) {
+
+  const allPurchases = await Purchase.getAll();
+
+  const purchasesArray = [];
+
+
+  const arrayOfPromises = allPurchases.map(async purchase => {
+
+    const theItem = await Item.getById(purchase.itemID);
+
+    const purchaseObject = {};
+
+    purchaseObject['name'] = theItem.name;
+    purchaseObject['date'] = purchase.purchaseDate.toISOString().slice(0, 10);
+
+    const stringifyPurchaseObject = JSON.stringify(purchaseObject);
+
+    return stringifyPurchaseObject;
+
+  })
+
+  console.log(arrayOfPromises);
+
+  // loop through purchases
+  // allPurchases.forEach(purchase => {
+
+  //   const theItem = await Item.getById(purchase.itemID);
+
+  //   const purchaseObject = {};
+
+  //   purchaseObject['name'] = theItem.name;
+  //   purchaseObject['date'] = purchase.purchaseDate.toISOString().slice(0, 10);
+
+  //   purchasesArray.push(stringifyPurchaseObject);
+
+  // })
+
+  Promise.all(arrayOfPromises).then((data) => {
+
+    res.send(data);
+  })
+
 }
 
 async function simulatePurchase(req, res) {
@@ -227,9 +267,6 @@ async function simulatePurchase(req, res) {
 
   // get all purchases to see which items have decreased in inventory
   const allPurchases = await Purchase.getAll();
-  console.log('$$$$$$$$$$$$$$$$$$$$$')
-  console.log(allPurchases);
-  console.log('$$$$$$$$$$$$$$$$$$$$$')
 
   // isolate just the item IDs
   const allPurchasedItems = allPurchases.map(purchase => {
@@ -409,6 +446,7 @@ module.exports = {
   createTable,
   createTableFurniture,
   createTableChipotle,
-  createTableBlockbuster
+  createTableBlockbuster,
+  sendPurchaseRecords
 }
 

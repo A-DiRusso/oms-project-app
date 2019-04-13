@@ -13,6 +13,27 @@ class Item {
         this.location_id = location_id;
     }
 
+    static getById(id) {
+        return db.one(`
+        select * from items
+        WHERE id=${id};
+        `)
+        .then(item => {
+            const itemInstance = new Item(item.id,
+                item.name,
+                item.sku,
+                item.lead_time,
+                item.wholesale,
+                item.retail,
+                item.stock,
+                item.simulated_stock,
+                item.location_id
+
+            )
+            return itemInstance;
+        });
+    }
+
     static getAll() {
         return db.any(`
             select * from items

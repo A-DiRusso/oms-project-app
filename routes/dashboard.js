@@ -10,13 +10,16 @@ const {
     createTable,
     createTableFurniture,
     createTableChipotle,
-    createTableBlockbuster
+    createTableBlockbuster,
+    sendPurchaseRecords
 } = require('../controllers/dashboard');
 
 dashboardRouter.get('/', //ensureAuthenticated,
 showDashboard);
 
 dashboardRouter.post('/buy', simulatePurchase);
+
+dashboardRouter.get('/purchaserecords', sendPurchaseRecords);
 
 dashboardRouter.post('/reset', resetSim);
 
