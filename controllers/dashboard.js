@@ -21,7 +21,7 @@ async function showDashboard(req, res) {
 
     const allItems = await Item.getAll();
 
-    let addItemsButton = '<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
+    let addItemsButton = '<button type="submit" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
   
     const itemsList = allItems.map(item => {
 
