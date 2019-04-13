@@ -8,6 +8,7 @@ const simulatedCells = document.querySelectorAll('[data-simulated-stock]');
 const modifiedCell = document.querySelector('[data-modified]');
 const originalCell = document.querySelector('[data-sim-modified]');
 const originalStockCells = document.querySelectorAll('[data-original-stock]');
+const whatDayDiv = document.querySelector('[data-what-day]');
 
 const allDivs = document.querySelectorAll('div');
 
@@ -97,6 +98,14 @@ function pullDateFromSlider() {
 
     // what day user is on
     let day = parseInt(slider.value);
+
+    if (day != startDay && day != 0) {
+        
+        whatDayDiv.textContent = `Day ${day}`;
+    } else {
+        
+        whatDayDiv.textContent = ``;
+    }
 
     // if this is the first time user is moving the slider
     if (allChanges.length === 0) {
@@ -193,25 +202,11 @@ function findDailyPurchaseTotals(day) {
 
 }
 
-// function findCells() {
-
-//     // isolates the cell that needs to be changed
-//     const cellToChange = modifiedCell;
-//     const originalStockCell = originalCell;
-
-//     const targetedCells = {
-//         cellToChange: cellToChange,
-//         originalStockCell: originalStockCell
-//     }   
-
-//     return targetedCells;
-
-// }
-
 function changeCellValue(dailyPurchaseTotal, day) {
 
     const cellToChange = modifiedCell;
-    // const originalStockCell = originalCell;
+    // value of original stock at day 0
+    const originalStockValue = parseInt(originalCell.textContent);
 
     // const targetedCells = findCells();
 
@@ -221,5 +216,25 @@ function changeCellValue(dailyPurchaseTotal, day) {
     const currentStock = parseInt(cellToChange.textContent);
  
     cellToChange.textContent = currentStock + dailyPurchaseTotal;
+
+    cellToChange.classList.remove(cellToChange.classList[1]);
+
+    // change colors according to inventory level
+    if (originalStockValue - cellToChange.textContent > 100) {
+        console.log('this is running');
+        cellToChange.classList.add('darker-red');
+        cellToChange.classList.add('text-light');
+    } else if (originalStockValue - cellToChange.textContent > 50 && originalStockValue - cellToChange.textContent <= 100) {
+        cellToChange.classList.add('bg-danger');
+        cellToChange.classList.remove('text-light');
+    } else if (originalStockValue - cellToChange.textContent > 0 && originalStockValue - cellToChange.textContent <= 50) {
+        cellToChange.classList.add('bg-warning');
+        cellToChange.classList.remove('text-light');
+    } else if (originalStockValue - cellToChange.textContent === 0) {
+        cellToChange.classList.remove(cellToChange.classList[1]);
+        cellToChange.classList.remove('text-light');
+    }
+
+
 
 }
