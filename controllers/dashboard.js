@@ -306,6 +306,7 @@ async function resetSim(req, res) {
 
 
 async function clearTable(req, res) {
+  resetSim(req, res);
   // needs to wipe clean all data that is in the items table
   await Purchase.deleteAll();
   await Item.deleteAll();
