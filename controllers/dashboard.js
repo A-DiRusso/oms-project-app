@@ -354,6 +354,8 @@ async function createTable(req, res) {
 }
 
 async function createTableFurniture(req, res) {
+  await Purchase.deleteAll();
+  await Item.deleteAll();
 
   // create a bunch of preset objects for furniture;
   const furnitureArray = furniture();
@@ -370,6 +372,8 @@ async function createTableFurniture(req, res) {
 }
 
 async function createTableChipotle(req, res) {
+  await Purchase.deleteAll();
+  await Item.deleteAll();
 
   const chipotleArray = chipotle();
 
@@ -382,6 +386,8 @@ async function createTableChipotle(req, res) {
 }
 
 async function createTableBlockbuster(req, res) {
+  await Purchase.deleteAll();
+  await Item.deleteAll();
 
   const blockbusterArray = blockbuster();
 
