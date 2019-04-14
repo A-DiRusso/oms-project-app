@@ -42,7 +42,6 @@ allDivs.forEach(div => {
 
 simulateButton.addEventListener('click', function() {
 
-    console.log('button clicked');
     localStorage.clear();
 
 
@@ -103,11 +102,12 @@ slider.addEventListener('change', pullDateFromSlider);
 
 function pullDateFromSlider() {
 
-    // get the max value (last day) of slider
+    // get the max value (last simulated day) from slider
     const startDay = parseInt(slider.getAttribute('max'));
 
-    // what day user is on
+    // what day user has switched to
     let day = parseInt(slider.value);
+    // console.log(day);
 
     if (day != startDay && day != 0) {
         
@@ -119,11 +119,13 @@ function pullDateFromSlider() {
 
     // if this is the first time user is moving the slider
     if (allChanges.length === 0) {
+        // push the starting (max) value to the array to start with
         allChanges.push(startDay);
     }
 
     // push the current day user is on the allChanges
     allChanges.push(day);
+    // console.log(allChanges);
 
     calculatePurchaseTotals(day);
 
@@ -160,7 +162,7 @@ function getPurchaseTotals() {
 
         }
     })
-
+    // returns all purchases sorted by date, regardless of position on slider (has just the item names)
     return purchasesPerDayMoreInfo;
 
 }
@@ -306,22 +308,27 @@ function getAllDates() {
 
 function getSliderDates(day) {
 
-    const allActiveDaysArray = [];
+    // day = 1
 
+    const allActiveDaysArray = [];
+    // previousDay = 0
     const previousDay = allChanges[allChanges.length - 2];
 
-    // if user moved backwards in time (left direction on slider, got closer to day 0)
+    // if user moved backwards in time (left direction on slider, got closer to day 0
+    // 1 > 0
     if (previousDay > day) {
 
         // this for loop works only if user is going backwards in time (left direction on slider)
-        for (let i = previousDay - 1; i >= day; i--) {
-    
+        for (let i = previousDay; i > day; i--) {
+            // i = previousDay
+            // i = 1
             allActiveDaysArray.push(i);
         } 
+    // 0 < 1
     } else if (previousDay < day) {
 
         for (let i = previousDay + 1; i <= day; i++) {
-    
+            // i = 1
             allActiveDaysArray.push(i);
     
         }
@@ -333,121 +340,106 @@ function getSliderDates(day) {
 
 function calculatePurchaseTotals(sliderDay) {
 
+    // current day that the user has switched to on the slider
+    // day = 1
     const day = sliderDay;
 
     // previous day is day that slider was on right before current day
+    // previousDay = 0
     const previousDay = allChanges[allChanges.length - 2];
+    // console.log(previousDay);
 
     // all item purchase records grouped by each date of simulation
     const allPurchaseRecords = getPurchaseTotals();
-    const allDates = getAllDates();
-
-    const sliderDates = getSliderDates(day);
-
-
-    // an array with arrays of just the item names purchased on each date
-    // console.log('--------------- allPurchaseRecords ----------------');
     // console.log(allPurchaseRecords);
-    // console.log('--------------- allPurchaseRecords ----------------');
-    // this is undefined at day 0
+    // console.log(allPurchaseRecords);
+    // gets all possible dates in simulation
+    const allDates = getAllDates();
+    // console.log(allDates);
+    // gets just the dates included in most recent move of slider
+    const sliderDates = getSliderDates(day);
+    // sliderDates = 1
+    console.log(sliderDates);
+
     const itemNamesPurchasedPerDay = [];
     
-    // for each date that the slider passed over
+    // for each date included in slider move
     sliderDates.forEach(date => {
+        // date = 1
 
         let purchasesThatDay = [];
-
+        // if on day 0
         if (date === 0) {
-            purchasesThatDay = [0];
+            // get purchase totals for day 1
+            // purchasesThatDay = [0];
+            purchasesThatDay = allPurchaseRecords[allDates[1]];
+            // day 0 holds purchase totals for day 1 now
         } else {
-
+            // otherwise, get the purchase records for the current slider date
+            // purchasesThatDay = allPurchaseRecords[allDates[1]]
+            // purchasesThatDay = allPurchaseRecords[2019-04-14]
             purchasesThatDay = allPurchaseRecords[allDates[date]];
+            //  purchasesThatDay = ['chair']
         }
-        console.log(date);
-        // pushs an array with the item names of
         itemNamesPurchasedPerDay.push(purchasesThatDay);
     });
-    // console.log('--------------- itemNamesPurchasedPerDay ----------------');
-    // console.log(itemNamesPurchasedPerDay);
-    // console.log('--------------- itemNamesPurchasedPerDay ----------------');
+    // ['chair']
+    console.log(itemNamesPurchasedPerDay);
 
-    // an array with the purchase QTYs of each item per day
+    // an array of objects with the purchase QTYs of each item per day inluded in the slider move
     const itemTotalsPerDay = [];
 
     // loop through each day in array
-    itemNamesPurchasedPerDay.forEach(day => {
-
-        // console.log(day);
+    itemNamesPurchasedPerDay.forEach(sliderDay => {
+        // inside of that one array [] = 'chair'
 
         const itemTotals = {};
         
-        // if user is on Day 0
-        // item totals purchased is original stock - all totals for previous days added together
-        // if (!day) {
-
-        //     itemTotals[item] += 1;
-        // }
         
-        // loop through items purchased during that day
-        day.forEach(item => {
+        // loop through items purchased that day
+        // item is 'chair'
+        sliderDay.forEach(item => {
 
-            // if user is at Day 0
-            // if (item === 0) {
-
-            //     const allChangedItems = modifiedItems;
-
-            //     allChangedItems.forEach(changedItem => {
-
-            //         let originalStockCell = '';
-
-            //         for(let i = 0; i < allItemNames.length; i++) {
-
-            //             if (allItemNames[i] === changedItem) {
-
-            //                 originalStockCell = originalStockCells[i];
-
-            //             }
-
-            //         }
-
-            //         console.log(changedItem.textContent);
-            //         console.log(originalStockCell.textContent);
-            //         console.log(itemTotals);
-            //         console.log(itemTotals[changedItem.textContent]);
-            //         console.log(parseInt(originalStockCell.textContent) - itemTotals[changedItem]);
-            //         itemTotals[changedItem] += parseInt(originalStockCell.textContent) - itemTotals[changedItem]
-
-            //     })
-
+            // if item already exists as key value pair in the object, increment by 1
             if (itemTotals[item]) {
                 // console.log(itemTotals);
                 itemTotals[item] += 1;
+            // else establish new key value pair
             } else {
                 // console.log(itemTotals);
                 itemTotals[item] = 1;
             }
         })
-
+        // [{'chair': 1}]
         itemTotalsPerDay.push(itemTotals);
 
     })
+    // [{'chair': 1}]
     // console.log('--------------- itemTotalsPerDay ----------------');
-    // console.log(itemTotalsPerDay);
+    console.log(itemTotalsPerDay);
     // console.log('--------------- itemTotalsPerDay ----------------');
 
     // console.log(itemTotalsPerDay);
-
+    // for each day
+    // for each object in item totals per day
     itemTotalsPerDay.forEach(itemTotalsThatDay => {
-
+        // for each item total that day
+        // item = bench
         for (item in itemTotalsThatDay) {
-
+            // isolate the item total
+            // bench: 1, therefore itemTotal = 1
             const itemTotal = itemTotalsThatDay[item];
-            if (previousDay > day) {
-                
+            // if the slider is going to the left and slider value is at day 0 now
+            if (previousDay > day && day === 0) {
+                // call changeCellValue with that item, that item's total, and the current slider day
                 changeCellValue(item, itemTotal, day);
             // if slider is going to the right (towards last simulation day)
             } else if (previousDay < day) {
+                // call changeCellValue with that item, negative of that item's total, and the current slider day
                 changeCellValue(item, -itemTotal, day);
+            } else if (previousDay > day) {
+                // item = bench, itemTotal = 1, day = 2
+                changeCellValue(item, itemTotal, day);
             }
         }
 
@@ -459,39 +451,50 @@ function calculatePurchaseTotals(sliderDay) {
 
 function changeCellValue(purchasedItem, itemTotal, day) {
 
+    // purchasedItem = bench, itemTotal = -1, day = 3
+    // console.log(purchasedItem, itemTotal);
+
     let simulatedCell = '';
 
     const changedCells = modifiedItems;
 
     // if day is 0, loop through all modified cells and changed simulated cells to be = to original stock value
-    if (day === 0) {
+    // if (day === 0) {
+    //     // all cells that were modified
+    //     const modifiedCells = modifiedItems;
+    //     // for each modified cell
+    //     modifiedCells.forEach(cell => {
+    //         // get original stock value
+    //         const originalStock = parseInt(cell.parentElement.children[5].textContent);
+    //         // get cell to change
+    //         const cellToChange = cell.parentElement.children[6];
+    //         // set simulated cell's value equal to original stock
+    //         cellToChange.textContent = originalStock
+    //     })
 
-        const modifiedCells = modifiedItems;
-
-        modifiedCells.forEach(cell => {
-            const originalStock = parseInt(cell.parentElement.children[5].textContent);
-            const cellToChange = cell.parentElement.children[6];
-
-            cellToChange.textContent = originalStock
-        })
-
-
-    } else {
-
+    //     // if slider is not on day 0
+    // } else {
+        // loop through all possible item names
+        // console.log(allItemNames);
+        // bench, chair, table
         for (let i = 0; i < allItemNames.length; i++) {
-    
-    
+            // if item name in table equals the purchased item
+            // allItemNames[0].textContent = 'bench', purchasedItem = 'bench'
             if (allItemNames[i].textContent === purchasedItem) {
+                // slide over to the right and find the correct simulated cell for that item in the table
+                //simulatedCells[0]
                 simulatedCell = simulatedCells[i];
-            } else {
             }
     
         }
-    
+        // set that simulated cell's value equal to its current value + purchase QTY
+        // simulatedCell.textContent = 25 - 1 = 24
         simulatedCell.textContent = parseInt(simulatedCell.textContent) + itemTotal;
 
-    }
+    // }
 
+
+    // handle background color
     changedCells.forEach(cell => {
 
         const cellToChangeColor = cell.parentElement.children[6];
@@ -516,7 +519,6 @@ function changeCellValue(purchasedItem, itemTotal, day) {
             cellToChangeColor.classList.add('bg-danger');
             cellToChangeColor.classList.remove('text-light');
         } else if (originalStock - simulatedStock > 0 && originalStock - simulatedStock <= 50) {
-            console.log('this is running');
             cellToChangeColor.classList.add('bg-warning');
             cellToChangeColor.classList.remove('text-light');
         } else if (originalStock - simulatedStock === 0) {
@@ -525,8 +527,6 @@ function changeCellValue(purchasedItem, itemTotal, day) {
         }
 
     })
-
-
 
     
 }
