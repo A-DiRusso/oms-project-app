@@ -38,6 +38,10 @@
     ${additems}
   </div>
 
+  <div data-show-options>
+    
+  </div>
+
   <!-- Modal -->
 <div class="modal fade" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
@@ -151,7 +155,7 @@ aria-hidden="true">
     <form action="/buy" method="POST">
       <select name="itemSelect">
         <option value="" disabled selected>Select item to simulate</option>
-        <option value="random" name="random">Random Simulation</option>
+        <option value="random" name="random">All Inventory</option>
         ${choices}
       </select>
       <label id="purchased_item" class="sr-only">Simulate Purchase</label>
@@ -163,6 +167,8 @@ aria-hidden="true">
         <option value="3" name="1">3</option>
         <option value="4" name="1">4</option>
         <option value="5" name="1">5</option>
+        <option value="20" name="20">20</option>
+        <option value="30" name="30">30</option>
       </select>
 
 
@@ -192,6 +198,11 @@ aria-hidden="true">
   <h5 class="simulated-data">Profits: ${profit}</h5>
   
 
+</div>
+
+<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModal"
+aria-hidden="true">
+    <h1>This is modal</h1>
 </div>
 
 

@@ -9,7 +9,7 @@ const blockbuster = require('../presets/blockbuster');
 
 async function showDashboard(req, res) {
 
-    console.log(req.session);
+    console.log(req.session.itemLikelihood);
    
 
     let purchaseTotals = {};
@@ -161,7 +161,6 @@ async function sendPurchaseRecords(req, res) {
 
   })
 
-  console.log(arrayOfPromises);
 
   // loop through purchases
   // allPurchases.forEach(purchase => {
@@ -196,10 +195,48 @@ async function simulatePurchase(req, res) {
   if (req.body.itemSelect === "random") {
     
     const allItems = await Item.getAll();
+    console.log(allItems);
     const numberOfItems = allItems.length;
+
+    let itemToIncreaseChance = '';
+    let percentageToIncrease = 0;
+
+    for (item in req.session.itemLikelihood) {
+      itemToIncreaseChance = item;
+      percentageToIncrease = req.session.itemLikelihood[item];
+    }
+
+    console.log(itemToIncreaseChance);
+    console.log(percentageToIncrease);
 
     let day = 0;
     const date = new Date();
+
+    const allOptions = [];
+
+    for (let i = 0; i < numberOfItems; i++) {
+
+      allOptions.push(i);
+    }
+    for (let i = 0; i < parseInt(percentageToIncrease); i += 10) {
+
+
+      for (let i = 0; i < allItems.length; i++) {
+  
+        console.log(allItems[i]);
+  
+        if (allItems[i].name === itemToIncreaseChance) {
+          console.log('this is running');
+          allOptions.push(i);
+  
+        }
+      }
+
+
+    }
+
+    console.log(allOptions);
+
 
     // keep loop going for each day
     while (day < numOfDays) {
@@ -209,8 +246,10 @@ async function simulatePurchase(req, res) {
 
       // while customers coming in is still less than user entered total customers per day
       while (customerCounter < req.body.customerCount) {
-        const randomItem = allItems[Math.floor(numberOfItems * Math.random())];
-        const randomItemName = randomItem.name;
+
+        const randomItem = allOptions[Math.floor(allOptions.length * Math.random())];
+        // console.log(randomItem);
+        const randomItemName = allItems[randomItem].name;
         const itemInstance = await Item.getByName(randomItemName);
         const itemID = itemInstance.id;
     
@@ -298,8 +337,6 @@ async function simulatePurchase(req, res) {
 
   })
 
-  console.log(purchasesPerDate);
-
   const purchaseTotalsPerDay = {};
 
   purchasesPerDate.forEach(date => {
@@ -309,8 +346,6 @@ async function simulatePurchase(req, res) {
       purchaseTotalsPerDay[date] = 1;
     }
   })
-
-  console.log(purchaseTotalsPerDay);
 
 
 
@@ -334,6 +369,7 @@ async function resetSim(req, res) {
   req.session.sum = '';
   req.session.purchaseTotals = {};
   req.session.purchaseTotalsPerDay = '';
+  req.session.itemLikelihood = {};
 
   req.session.soldStockSum = '';
   req.session.save();
@@ -442,6 +478,20 @@ async function createTableBlockbuster(req, res) {
   res.redirect('/');
 }
 
+async function adjustPurchasePercentage(req, res) {
+  console.log('THIS IS THE REQ THIS IS WORKING');
+  console.log(req.body);
+
+  const itemLikelihood = {};
+
+  itemLikelihood[req.body.item] = req.body.percentLikelihood;
+
+  req.session.itemLikelihood = itemLikelihood;
+
+  res.redirect('/');
+
+}
+
 module.exports = {
   showDashboard,
   simulatePurchase,
@@ -451,6 +501,7 @@ module.exports = {
   createTableFurniture,
   createTableChipotle,
   createTableBlockbuster,
-  sendPurchaseRecords
+  sendPurchaseRecords,
+  adjustPurchasePercentage
 }
 

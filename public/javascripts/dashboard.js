@@ -14,8 +14,16 @@ const whatDayDiv = document.querySelector('[data-what-day]');
 const resetButton = document.querySelector('[data-reset-sim]');
 const modifiedItems = document.querySelectorAll('[data-item-changed]');
 const allItemNames = document.querySelectorAll('[data-item-name]');
+const optionsDiv = document.querySelector('[data-show-options]');
 
 const allDivs = document.querySelectorAll('div');
+
+allItemNames.forEach(itemName => {
+
+    itemName.addEventListener('click', changeBuyPercentage);
+
+})
+    
 
 // console.log(modifiedCell);
 
@@ -424,16 +432,17 @@ function calculatePurchaseTotals(sliderDay) {
     // for each object in item totals per day
     itemTotalsPerDay.forEach(itemTotalsThatDay => {
         // for each item total that day
-        // item = bench
+        // item = chair
         for (item in itemTotalsThatDay) {
             // isolate the item total
-            // bench: 1, therefore itemTotal = 1
+            // chair: 1, therefore itemTotal = 1
             const itemTotal = itemTotalsThatDay[item];
             // if the slider is going to the left and slider value is at day 0 now
             if (previousDay > day && day === 0) {
                 // call changeCellValue with that item, that item's total, and the current slider day
                 changeCellValue(item, itemTotal, day);
             // if slider is going to the right (towards last simulation day)
+            // 0 < 1
             } else if (previousDay < day) {
                 // call changeCellValue with that item, negative of that item's total, and the current slider day
                 changeCellValue(item, -itemTotal, day);
@@ -451,47 +460,23 @@ function calculatePurchaseTotals(sliderDay) {
 
 function changeCellValue(purchasedItem, itemTotal, day) {
 
-    // purchasedItem = bench, itemTotal = -1, day = 3
-    // console.log(purchasedItem, itemTotal);
-
     let simulatedCell = '';
 
     const changedCells = modifiedItems;
 
-    // if day is 0, loop through all modified cells and changed simulated cells to be = to original stock value
-    // if (day === 0) {
-    //     // all cells that were modified
-    //     const modifiedCells = modifiedItems;
-    //     // for each modified cell
-    //     modifiedCells.forEach(cell => {
-    //         // get original stock value
-    //         const originalStock = parseInt(cell.parentElement.children[5].textContent);
-    //         // get cell to change
-    //         const cellToChange = cell.parentElement.children[6];
-    //         // set simulated cell's value equal to original stock
-    //         cellToChange.textContent = originalStock
-    //     })
-
-    //     // if slider is not on day 0
-    // } else {
-        // loop through all possible item names
-        // console.log(allItemNames);
-        // bench, chair, table
-        for (let i = 0; i < allItemNames.length; i++) {
-            // if item name in table equals the purchased item
-            // allItemNames[0].textContent = 'bench', purchasedItem = 'bench'
-            if (allItemNames[i].textContent === purchasedItem) {
-                // slide over to the right and find the correct simulated cell for that item in the table
-                //simulatedCells[0]
-                simulatedCell = simulatedCells[i];
-            }
-    
+    for (let i = 0; i < allItemNames.length; i++) {
+        // if item name in table equals the purchased item
+        // allItemNames[1].textContent = 'chair', purchasedItem = 'chair'
+        if (allItemNames[i].textContent === purchasedItem) {
+            // slide over to the right and find the correct simulated cell for that item in the table
+            //simulatedCells[1]
+            simulatedCell = simulatedCells[i];
         }
-        // set that simulated cell's value equal to its current value + purchase QTY
-        // simulatedCell.textContent = 25 - 1 = 24
-        simulatedCell.textContent = parseInt(simulatedCell.textContent) + itemTotal;
 
-    // }
+    }
+    // set that simulated cell's value equal to its current value + purchase QTY
+    // simulatedCell.textContent = 25 - 1 = 24
+    simulatedCell.textContent = parseInt(simulatedCell.textContent) + itemTotal;
 
 
     // handle background color
@@ -546,6 +531,30 @@ function getPurchaseRecords() {
         })
     })
 }
+
+function changeBuyPercentage(e) {
+
+    console.log(e.target.textContent);
+    optionsDiv.innerHTML = '';
+
+    optionsDiv.innerHTML = `
+    <form action="/adjustitem" method="POST">
+        <h3>Increase purchase likelihood for ${e.target.textContent}</h3>
+        <input type="hidden" name="item" value="${e.target.textContent}">
+        <select name="percentLikelihood">
+            <option name="10" value="10">10%</option>
+            <option name="20" value="20">20%</option>
+            <option name="50" value="50">50%</option>
+        </select>
+    
+        <button type="submit">Submit</button>
+
+    </form>
+    `
+
+}
+
+// sendPost();
 
 getPurchaseRecords();
 

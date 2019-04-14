@@ -14,11 +14,11 @@ class User {
     static getByEmail(company_email) {
         return db.one(`SELECT * FROM users WHERE company_email=$1`, [company_email])
             .then((userData) => {
-                console.log(userData);
+                // console.log(userData);
 
                 const userInstance = new User(userData.id, userData.company_email, userData.password, userData.first_name, userData.last_name);
-                console.log("+++++++++++++++++")
-                console.log(userInstance)
+                // console.log("+++++++++++++++++")
+                // console.log(userInstance)
                 return userInstance;
             })
             .catch(err => err)
