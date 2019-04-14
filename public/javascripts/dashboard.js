@@ -7,13 +7,17 @@ const moreItemsDiv = document.querySelector('[data-more-items]');
 const slider = document.querySelector('.slider');
 const purchasesDiv = document.querySelector('[data-hidden-purchases');
 const simulatedCells = document.querySelectorAll('[data-simulated-stock]');
-const modifiedCell = document.querySelector('[data-modified]');
-const originalCell = document.querySelector('[data-sim-modified]');
+const modifiedCell = document.querySelectorAll('[data-modified]');
+const originalCells = document.querySelectorAll('[data-sim-modified]');
 const originalStockCells = document.querySelectorAll('[data-original-stock]');
 const whatDayDiv = document.querySelector('[data-what-day]');
 const resetButton = document.querySelector('[data-reset-sim]');
+const modifiedItems = document.querySelectorAll('[data-item-changed]');
+const allItemNames = document.querySelectorAll('[data-item-name]');
 
 const allDivs = document.querySelectorAll('div');
+
+// console.log(modifiedCell);
 
 allDivs.forEach(div => {
 
@@ -123,6 +127,41 @@ function pullDateFromSlider() {
 
     calculatePurchaseTotals(day);
 
+
+}
+
+function getPurchaseTotals() {
+
+    // pull everything out of local storage and put into an array of objects
+    const allPurchases = [];
+
+    const purchaseRecordsArray = Object.keys(localStorage);
+
+    purchaseRecordsArray.forEach(record => {
+        const purchaseObj = {};
+
+        purchaseObj['purchase'] = JSON.parse(localStorage.getItem(record));
+        allPurchases.push(purchaseObj);
+
+    })
+
+    const purchasesPerDayMoreInfo = {};
+
+    allPurchases.forEach(purchaseRecord => {
+
+        // if date is already a key in the more info object
+        if (purchasesPerDayMoreInfo[purchaseRecord.purchase.date]) {
+
+            purchasesPerDayMoreInfo[purchaseRecord.purchase.date].push(purchaseRecord.purchase.name);
+        
+        // if date not already a key in the more info object
+        } else {
+            purchasesPerDayMoreInfo[purchaseRecord.purchase.date] = [purchaseRecord.purchase.name];
+
+        }
+    })
+
+    return purchasesPerDayMoreInfo;
 
 }
 
@@ -241,43 +280,7 @@ function pullDateFromSlider() {
 
 // }
 
-function calculatePurchaseTotals(day) {
-
-    const originalStockCell = originalCell;
-    const cellToChange = modifiedCell;
-    
-    // previous day is day that slider was on right before current day
-    const previousDay = allChanges[allChanges.length - 2];
-    // console.log(previousDay);
-    // negative number if user is going forwards in time (further from day 0) right direction on slider
-
-
-    // pull everything out of local storage and put into an array of objects
-    const allPurchases = [];
-
-    const purchaseRecordsArray = Object.keys(localStorage);
-
-    purchaseRecordsArray.forEach(record => {
-        const purchaseObj = {};
-
-        purchaseObj['purchase'] = JSON.parse(localStorage.getItem(record));
-        allPurchases.push(purchaseObj);
-
-    })
-
-    // console.log(allPurchases[0].purchase);
-
-    const purchasesPerDay = {};
-
-    allPurchases.forEach(purchaseRecord => {
-        if (purchasesPerDay[purchaseRecord.purchase.date]) {
-            purchasesPerDay[purchaseRecord.purchase.date] += 1
-        } else {
-            purchasesPerDay[purchaseRecord.purchase.date] = 1;
-        }
-
-    })
-    // {The Lion King: 4}
+function getAllDates() {
 
     const startDate = new Date();
 
@@ -298,12 +301,14 @@ function calculatePurchaseTotals(day) {
 
     }
 
-    // console.log(datesObject);
-    // console.log(purchasesPerDay);
+    return datesObject;
+}
 
-    // console.log(purchasesPerDay[datesObject[1]]);
+function getSliderDates(day) {
 
     const allActiveDaysArray = [];
+
+    const previousDay = allChanges[allChanges.length - 2];
 
     // if user moved backwards in time (left direction on slider, got closer to day 0)
     if (previousDay > day) {
@@ -312,97 +317,215 @@ function calculatePurchaseTotals(day) {
         for (let i = previousDay - 1; i >= day; i--) {
     
             allActiveDaysArray.push(i);
-    
-    
-        }
-
-        let allDaysPurchaseTotal = 0;
-    
-        // for each day in the days array
-        allActiveDaysArray.forEach(day => {
-    
-            let dayPurchaseTotal = 0;
-    
-            // if loop is on day 0
-            if (day === 0) {
-                // purchase total for day 0 (which is implied) is original stock - all days total
-                dayPurchaseTotal = parseInt(originalStockCell.textContent) - allDaysPurchaseTotal - parseInt(cellToChange.textContent);
-                // console.log(`Day 0 purchase total: ${dayPurchaseTotal}`);
-    
-            } else {
-                // need to change this so it reads from localStorage
-                // dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
-                dayPurchaseTotal = purchasesPerDay[datesObject[day]];
-    
-            }
-            // calculate number of purchases on that day for each item and add to total
-            allDaysPurchaseTotal += dayPurchaseTotal
-        });
-    
-        // console.log(allDaysPurchaseTotal);
-    
-        changeCellValue(allDaysPurchaseTotal, day);
+        } 
     } else if (previousDay < day) {
-        
+
         for (let i = previousDay + 1; i <= day; i++) {
     
             allActiveDaysArray.push(i);
     
         }
 
-        let allDaysPurchaseTotal = 0;
+    }
 
-        allActiveDaysArray.forEach(day => {
+    return allActiveDaysArray;
+}
 
-            // let dayPurchaseTotal = parseInt(purchasesDiv.childNodes[day].textContent.split(' ')[1]);
-            let dayPurchaseTotal = purchasesPerDay[datesObject[day]];
+function calculatePurchaseTotals(sliderDay) {
 
-            allDaysPurchaseTotal -= dayPurchaseTotal;
+    const day = sliderDay;
 
+    // previous day is day that slider was on right before current day
+    const previousDay = allChanges[allChanges.length - 2];
+
+    // all item purchase records grouped by each date of simulation
+    const allPurchaseRecords = getPurchaseTotals();
+    const allDates = getAllDates();
+
+    const sliderDates = getSliderDates(day);
+
+
+    // an array with arrays of just the item names purchased on each date
+    // console.log('--------------- allPurchaseRecords ----------------');
+    // console.log(allPurchaseRecords);
+    // console.log('--------------- allPurchaseRecords ----------------');
+    // this is undefined at day 0
+    const itemNamesPurchasedPerDay = [];
+    
+    // for each date that the slider passed over
+    sliderDates.forEach(date => {
+
+        let purchasesThatDay = [];
+
+        if (date === 0) {
+            purchasesThatDay = [0];
+        } else {
+
+            purchasesThatDay = allPurchaseRecords[allDates[date]];
+        }
+        console.log(date);
+        // pushs an array with the item names of
+        itemNamesPurchasedPerDay.push(purchasesThatDay);
+    });
+    // console.log('--------------- itemNamesPurchasedPerDay ----------------');
+    // console.log(itemNamesPurchasedPerDay);
+    // console.log('--------------- itemNamesPurchasedPerDay ----------------');
+
+    // an array with the purchase QTYs of each item per day
+    const itemTotalsPerDay = [];
+
+    // loop through each day in array
+    itemNamesPurchasedPerDay.forEach(day => {
+
+        // console.log(day);
+
+        const itemTotals = {};
+        
+        // if user is on Day 0
+        // item totals purchased is original stock - all totals for previous days added together
+        // if (!day) {
+
+        //     itemTotals[item] += 1;
+        // }
+        
+        // loop through items purchased during that day
+        day.forEach(item => {
+
+            // if user is at Day 0
+            // if (item === 0) {
+
+            //     const allChangedItems = modifiedItems;
+
+            //     allChangedItems.forEach(changedItem => {
+
+            //         let originalStockCell = '';
+
+            //         for(let i = 0; i < allItemNames.length; i++) {
+
+            //             if (allItemNames[i] === changedItem) {
+
+            //                 originalStockCell = originalStockCells[i];
+
+            //             }
+
+            //         }
+
+            //         console.log(changedItem.textContent);
+            //         console.log(originalStockCell.textContent);
+            //         console.log(itemTotals);
+            //         console.log(itemTotals[changedItem.textContent]);
+            //         console.log(parseInt(originalStockCell.textContent) - itemTotals[changedItem]);
+            //         itemTotals[changedItem] += parseInt(originalStockCell.textContent) - itemTotals[changedItem]
+
+            //     })
+
+            if (itemTotals[item]) {
+                // console.log(itemTotals);
+                itemTotals[item] += 1;
+            } else {
+                // console.log(itemTotals);
+                itemTotals[item] = 1;
+            }
         })
 
-        // console.log(allDaysPurchaseTotal)
+        itemTotalsPerDay.push(itemTotals);
 
-        changeCellValue(allDaysPurchaseTotal, day);
+    })
+    // console.log('--------------- itemTotalsPerDay ----------------');
+    // console.log(itemTotalsPerDay);
+    // console.log('--------------- itemTotalsPerDay ----------------');
 
-    }
+    // console.log(itemTotalsPerDay);
+
+    itemTotalsPerDay.forEach(itemTotalsThatDay => {
+
+        for (item in itemTotalsThatDay) {
+
+            const itemTotal = itemTotalsThatDay[item];
+            if (previousDay > day) {
+                
+                changeCellValue(item, itemTotal, day);
+            // if slider is going to the right (towards last simulation day)
+            } else if (previousDay < day) {
+                changeCellValue(item, -itemTotal, day);
+            }
+        }
+
+    })
 
 
 }
 
 
-function changeCellValue(dailyPurchaseTotal, day) {
+function changeCellValue(purchasedItem, itemTotal, day) {
 
-    const cellToChange = modifiedCell;
-    // value of original stock at day 0
-    const originalStockValue = parseInt(originalCell.textContent);
+    let simulatedCell = '';
 
-    // const targetedCells = findCells();
+    const changedCells = modifiedItems;
 
-    // const cellToChange = targetedCells.cellToChange;
+    // if day is 0, loop through all modified cells and changed simulated cells to be = to original stock value
+    if (day === 0) {
 
-    // gets the current stock position (value that is currently in that cell)
-    const currentStock = parseInt(cellToChange.textContent);
- 
-    cellToChange.textContent = currentStock + dailyPurchaseTotal;
+        const modifiedCells = modifiedItems;
 
-    cellToChange.classList.remove(cellToChange.classList[1]);
+        modifiedCells.forEach(cell => {
+            const originalStock = parseInt(cell.parentElement.children[5].textContent);
+            const cellToChange = cell.parentElement.children[6];
 
-    // change colors according to inventory level
-    if (originalStockValue - cellToChange.textContent > 100) {
-        // console.log('this is running');
-        cellToChange.classList.add('darker-red');
-        cellToChange.classList.add('text-light');
-    } else if (originalStockValue - cellToChange.textContent > 50 && originalStockValue - cellToChange.textContent <= 100) {
-        cellToChange.classList.add('bg-danger');
-        cellToChange.classList.remove('text-light');
-    } else if (originalStockValue - cellToChange.textContent > 0 && originalStockValue - cellToChange.textContent <= 50) {
-        cellToChange.classList.add('bg-warning');
-        cellToChange.classList.remove('text-light');
-    } else if (originalStockValue - cellToChange.textContent === 0) {
-        cellToChange.classList.remove(cellToChange.classList[1]);
-        cellToChange.classList.remove('text-light');
+            cellToChange.textContent = originalStock
+        })
+
+
+    } else {
+
+        for (let i = 0; i < allItemNames.length; i++) {
+    
+    
+            if (allItemNames[i].textContent === purchasedItem) {
+                simulatedCell = simulatedCells[i];
+            } else {
+            }
+    
+        }
+    
+        simulatedCell.textContent = parseInt(simulatedCell.textContent) + itemTotal;
+
     }
+
+    changedCells.forEach(cell => {
+
+        const cellToChangeColor = cell.parentElement.children[6];
+
+        const bgToRemove = cellToChangeColor.classList[1];
+        
+
+        cellToChangeColor.classList.remove(bgToRemove);
+
+
+        const originalStock = parseInt(cell.parentElement.children[5].textContent);
+        const simulatedStock = parseInt(cell.parentElement.children[6].textContent);
+
+
+
+
+        if (originalStock - simulatedStock > 100) {
+            // console.log('this is running');
+            cellToChangeColor.classList.add('darker-red');
+            cellToChangeColor.classList.add('text-light');
+        } else if (originalStock - simulatedStock > 50 && originalStock - simulatedStock <= 100) {
+            cellToChangeColor.classList.add('bg-danger');
+            cellToChangeColor.classList.remove('text-light');
+        } else if (originalStock - simulatedStock > 0 && originalStock - simulatedStock <= 50) {
+            console.log('this is running');
+            cellToChangeColor.classList.add('bg-warning');
+            cellToChangeColor.classList.remove('text-light');
+        } else if (originalStock - simulatedStock === 0) {
+            cellToChangeColor.classList.remove(cellToChangeColor.classList[1]);
+            cellToChangeColor.classList.remove('text-light');
+        }
+
+    })
+
 
 
     

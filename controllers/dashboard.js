@@ -32,23 +32,27 @@ async function showDashboard(req, res) {
       let txtColor = '';
       let modified = '';
       let simModified = '';
+      let itemModified = '';
       if (itemPurchaseTotal > 100) {
         bgColor = 'darker-red';
         txtColor = 'text-light';
         modified = 'data-modified';
-        simModified = 'data-sim-modified'
+        simModified = 'data-sim-modified';
+        itemModified = 'data-item-changed';
       // else if there are no purchase records for that item (nothing purchased yet)
       } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
       
         bgColor = 'bg-danger';
         modified = 'data-modified';
         simModified = 'data-sim-modified';
+        itemModified = 'data-item-changed';
       
       } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
         bgColor = 'bg-warning';
         modified = 'data-modified';
         simModified = 'data-sim-modified';
+        itemModified = 'data-item-changed';
 
       } else if (!itemPurchaseTotal) {
         // txtColor = 'text-secondary'
@@ -57,7 +61,7 @@ async function showDashboard(req, res) {
 
       return `
       <tr>
-        <td class="border">${item.name}</td>
+        <td ${itemModified} data-item-name class="border">${item.name}</td>
         <td class="border">${item.sku}</td>
         <td class="border">${item.leadTime}</td>
         <td class="border">${item.wholesale}</td>
