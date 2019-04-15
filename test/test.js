@@ -10,4 +10,13 @@ describe('item model', () => {
         const allItems = await Items.getAll();
         expect(allItems).to.be.an.instanceOf(Array);
     });
+
+    it ('should get by id', async () => {
+        const anItem = await Items.getById(336);
+        expect(anItem).to.be.instanceOf(Items);
+    })
+    it ('should get by name', async () => {
+        const anItem = await Items.getByName('canned beans');
+        expect(anItem).to.be.instanceOf(Items);
+    })
 });
