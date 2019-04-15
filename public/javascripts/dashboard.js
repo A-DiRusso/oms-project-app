@@ -169,6 +169,8 @@ function calculatePurchaseTotals(sliderDay) {
     // an array of objects with the purchase QTYs of each item per day inluded in the slider move
     const itemTotalsPerDay = purchaseTotals(relevantPurchases);
 
+    console.log(itemTotalsPerDay);
+
     // for each day
     // for each object in item totals per day
     itemTotalsPerDay.forEach(itemTotalsThatDay => {
