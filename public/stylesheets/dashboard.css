@@ -42,3 +42,15 @@
     margin: 0 auto;
     /* background-color: grey; */
 }
+
+.purchase-details {
+    border-radius: 25px;
+    background-color: #8D8381;
+    position: absolute;
+    z-index: 1;
+    color: white;
+    width: 40%;
+    text-align: center;
+    top: 50%;
+
+}

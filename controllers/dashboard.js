@@ -108,23 +108,29 @@ async function showDashboard(req, res) {
         maxValue = Object.keys(req.session.purchaseTotalsPerDay).length;
         startValue = Object.keys(req.session.purchaseTotalsPerDay).length;
        }
-      //  if(req.session.email) {
-        res.render('dashboard', {
-          locals: {
-             userName: userName.firstName,
-             additems: addItemsButton,
-             items: itemsList.join(''),
-             choices: itemChoices.join(''),
-             revenueTotal: sum,
-             soldStockTotalCost: soldStockSum,
-             profit: profit,
-             purchaseTotalsPerDay: '',
-             name: userName,
-             maxday: maxDayHTML,
-             maxvalue: `max=${maxValue}`,
-             startvalue: `value=${startValue}`
-          }
-        });
+
+       if (req.session.email) {
+
+         res.render('dashboard', {
+           locals: {
+              userName: userName.firstName,
+              additems: addItemsButton,
+              items: itemsList.join(''),
+              choices: itemChoices.join(''),
+              revenueTotal: sum,
+              soldStockTotalCost: soldStockSum,
+              profit: profit,
+              purchaseTotalsPerDay: '',
+              name: userName,
+              maxday: maxDayHTML,
+              maxvalue: `max=${maxValue}`,
+              startvalue: `value=${startValue}`
+           }
+         });
+
+       } else {
+         res.redirect('/login');
+       }
 }
 
 // sends purchase records to be put in local storage on the front end
