@@ -15,10 +15,15 @@ const modifiedItems = document.querySelectorAll('[data-item-changed]');
 const allItemNames = document.querySelectorAll('[data-item-name]');
 const optionsDiv = document.querySelector('[data-show-options]');
 const allDivs = document.querySelectorAll('div');
+const purchaseDetailsDiv = document.querySelector('[data-show-purchase-details]');
 
 // -------------- event listeners ------------------
 
+simulatedCells.forEach(cell => {
 
+    cell.addEventListener('click', showInventoryTotals)
+
+})
 
 // attaches event listener to item names for purchase likelihood changes
 allItemNames.forEach(itemName => {
@@ -297,6 +302,61 @@ function changeBuyPercentage(e) {
     `
     
     
+}
+
+function showInventoryTotals(e) {
+
+    // all item purchase records grouped by each date of simulation
+    const allPurchaseRecords = getPurchaseTotalsFromLocalStorage();
+
+    // gets all possible dates in simulation
+    const allDates = getAllDates();
+
+    console.log(slider.value);
+
+    if (slider.value != 0) {
+
+
+        const relevantPurchases = relevantPurchaseRecords([slider.value], allPurchaseRecords, allDates);
+        const itemTotals = purchaseTotals(relevantPurchases)[0];
+    
+        const purchaseDetailsDiv = document.querySelector('[data-show-purchase-details]');
+    
+        const selectedItem = e.target.parentElement.children[0].textContent;
+        console.log(selectedItem);
+    
+        let purchaseTotal = 0;
+    
+        for (item in itemTotals) {
+    
+            console.log(item);
+    
+            if (selectedItem === item) {
+                console.log('found match');
+                purchaseTotal = itemTotals[item];
+            }
+        }
+    
+        purchaseDetailsDiv.innerHTML = (`
+        <div class="d-flex justify-content-center">
+            <h1>Item: ${selectedItem}</h1>
+            <i data-exit-details class="far fa-times-circle fa-2x ml-5"></i>
+        </div>
+        <h2>Day: ${slider.value}</h2>
+        <h3>Purchases that day: ${purchaseTotal}</h3>
+        `)
+
+    }
+
+
+    const itemStockDetailsExit = document.querySelector('[data-exit-details]');
+
+    itemStockDetailsExit.addEventListener('click', function() {
+        purchaseDetailsDiv.innerHTML = '';
+    })
+    
+
+
 }
 
 getPurchaseRecords();
