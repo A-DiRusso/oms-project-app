@@ -155,7 +155,7 @@ function calculatePurchaseTotals(sliderDay) {
     // console.log(previousDay);
 
     // all item purchase records grouped by each date of simulation
-    const allPurchaseRecords = getPurchaseTotals();
+    const allPurchaseRecords = getPurchaseTotalsFromLocalStorage();
 
     // gets all possible dates in simulation
     const allDates = getAllDates();

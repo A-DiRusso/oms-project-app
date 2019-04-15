@@ -112,7 +112,7 @@ function purchaseTotals(purchasesArray) {
     return itemTotalsPerDay;
 }
 
-function getPurchaseTotals() {
+function getPurchaseTotalsFromLocalStorage() {
 
     // pull everything out of local storage and put into an array of objects
     const allPurchases = [];
