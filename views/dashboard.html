@@ -60,13 +60,18 @@
                     <button type="submit" class="btn btn-sm btn-outline-secondary">Clear Table</button>
                   </form>
               </div>
+
             </div>
+            
 
             <h2 class="container">Stock Data</h2>
             <div class="table-responsive">
                 <table class="table table-hover container text-center border-light">
+                    <div data-show-options class="likelihood"></div>
                     <thead class="bg-secondary text-white">
+
                       <tr>
+                          
                         <th scope="col">Item</th>
                         <th scope="col">SKU</th>
                         <th scope="col">Lead Time</th>
@@ -88,7 +93,7 @@
                 <input type="range" min="0" ${maxvalue} ${startvalue} list="tickmarks" class="slider" id="myRange">
                 <h3 data-max-day>${maxday}</h3>
             </div>
-              
+            
               <div data-hidden-purchases class="hidden-purchases d-none">
                 ${purchaseTotalsPerDay}
               </div>
@@ -148,11 +153,14 @@
 
 
       </div>
-    </div> 
-
-  <div data-show-options>
+   
     
-  </div>
+      
+    
+    
+  
+    
+  
 
   <!-- Modal -->
 <div class="modal" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

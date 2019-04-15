@@ -36,3 +36,9 @@
 .tickmarks {
     display: block;
 }
+
+.likelihood {
+    position: relative;
+    margin: 0 auto;
+    /* background-color: grey; */
+}
