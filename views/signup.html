@@ -10,33 +10,14 @@
 
     <title>Matrix Simulations</title>
 </head>
-<style>
 
-.jumbotron {
-    padding: 1px;
-
-    background-color: #98ccae;
-    background-color: #b8ffea;
-    background-color: black;
-    color: lime;
-}
-html {
-    background-color: #b8ffea;
-    background-color: black ;
-}
-    .alert-primary {
-    color: lime;
-    background-color: black;
-    border-color: lime;
-}
-</style>
 <body>
 
     <section class="jumbotron text-center">
         <div class="container">
           <h1 class="jumbotron-heading">Please sign up to enter the simulation<br>
        </h1>
-            <h2 class="alert alert-primary"> ${(message) ? message : "Sign up"}</h2>
+            <h2 class="alert"> ${(message) ? message : "Sign up"}</h2>
           <p class="lead text-muted">    
               <form
         action="/signup"
@@ -61,7 +42,7 @@ html {
                             <input required value="Mauldin" name="lastname" type="text" class="form-control" id="lasttnameid" placeholder="last name">
                           </div>
     
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-secondary">Submit</button>
               </form>
         </p>
         </div>
