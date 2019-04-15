@@ -15,7 +15,7 @@
 
 <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Welcome, ${userName}</a>
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Welcome, ${userName}</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
               <a class="nav-link" href="/login">Sign out</a>
@@ -37,7 +37,7 @@
 
           </div>
           <div class ="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" >
-              <h1 class="h2">Dashboard</h1>
+              <h1>OMS Dashboard</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
                     ${additems}
@@ -99,7 +99,7 @@
             <h3 class="container mb-1 pb-2 border-bottom">Simulation Station</h3>
             <div class="container d-flex flex-wrap flex-md-nowrap align-items-center justify-content-around pt-2">
                 
-                    <form action="/buy" method="POST">
+                    <form action="/buy" method="POST" class="">
                       <div class="btn-toolbar d-flex mb-2 mb-md-0">
                           <div class="btn-group align-items-center">
                             <select class="btn btn-sm btn-outline-secondary" name="itemSelect">
@@ -125,20 +125,27 @@
                           <div class="btn-group ml-3 mr-3 align-items-center">
                             <input class="btn btn-sm btn-outline-secondary" type="number" name="customerCount" placeholder="Customers per day">
                           </div>
-                          <div class="btn-group mr-2  align-items-center">
-                              <button data-simulate class="btn btn-sm btn-outline-secondary" type="submit" class="ml-5">Simulate</button>
-      
-                              <form action="/reset" method="POST" class="float-right mr-5">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">Reset Simulation</button>
-                              </form>
+                          
+                          <div class="btn-group align-items-center">
+                              <button data-simulate class="btn btn-outline-secondary" type="submit" class="ml-5">Simulate</button>
                           </div>
                         </div>
                       </form>
-                  
+
+                      <div class="border-right" style="height: 30px"></div>
+                      
+                      <form action="/reset" method="POST" class="d-flex">
+                        <button type="submit" class="btn btn-outline-secondary">Reset Simulation</button>
+                      </form>
+                    </div>
                   </div>
+                      
+        </div>
+                  
+          
 
 
-            </div>
+            
             
             <div class="slider-container container d-flex justify-content-center mt-1">
                 <h3>Day 0</h3>
@@ -159,7 +166,7 @@
               
               
             <div class="container pb-5 pt-2">
-              <h4 class="simulated-data">Simulated Data</h4>
+              <h4 class="simulated-data">Projected Cash Flow</h4>
               <h6 class="simulated-data">Revenue: ${revenueTotal}</h6>
               <h6 class="simulated-data">Cost of Outgoing Stock: ${soldStockTotalCost} </h6>
               <h6 class="simulated-data">Profits: ${profit}</h6>

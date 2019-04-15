@@ -282,8 +282,9 @@ function changeBuyPercentage(e) {
     optionsDiv.innerHTML = '';
 
     optionsDiv.innerHTML = `
+        <a href="#" rel="popover" data-content='
         <form action="/adjustitem" method="POST">
-        <input type="hidden" name="item" value="${e.target.textContent}">
+        <input name="item" data-toggle="popover" value="${e.target.textContent}">
         <select name="percentLikelihood">
             <option value="" disabled selected>Increase purchase likelihood for ${e.target.textContent}</option>
             <option name="10" value="10">10%</option>
@@ -293,7 +294,8 @@ function changeBuyPercentage(e) {
         
         <button type="submit">Submit</button>
         
-        </form>
+        </form>'
+        ></a>
     `
     
     
