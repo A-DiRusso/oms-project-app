@@ -367,6 +367,7 @@ async function resetSim(req, res) {
 
   // needs to update numbers in simulated stock column to match original stock
   const allItems = await Item.getAll();
+  
 
   // each of the items in allItems needs to call resetStock
   const arrayOfPromises = allItems.map(async item => {
@@ -374,17 +375,22 @@ async function resetSim(req, res) {
     return await item.resetStock()
   })
   // fulfill all promises then redirect to dashboard
-  Promise.all(arrayOfPromises).then(values => {
-    
-    res.redirect('/');
-    
-  })
+  await Promise.all(arrayOfPromises);
+
+  res.redirect('/');
 }
 
 // clears table of items and simulations run
 async function clearTable(req, res) {
   // clear table needs to reset simulation, which wipes sessions clean
-  resetSim(req, res);
+  // resetSim(req, res);
+  req.session.sum = '';
+  req.session.purchaseTotals = {};
+  req.session.purchaseTotalsPerDay = '';
+  req.session.itemLikelihood = {};
+
+  req.session.soldStockSum = '';
+  req.session.save();
 
   // also needs to wipe clean all data that is in the items table
   await Purchase.deleteAll();
