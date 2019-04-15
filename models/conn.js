@@ -6,8 +6,8 @@ const pgp = require('pg-promise')({
 
 
 const options = {
-    host: 'localhost',
-    database: 'oms-project-app'
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME
 
 };
 
