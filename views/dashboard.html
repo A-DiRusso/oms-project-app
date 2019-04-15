@@ -87,14 +87,7 @@
                 <h3>Day 0</h3>
                 <input type="range" min="0" ${maxvalue} ${startvalue} list="tickmarks" class="slider" id="myRange">
                 <h3 data-max-day>${maxday}</h3>
-                <!-- <datalist id="tickmarks">
-                  <option value="1" label="1">
-                    <option value="2">
-                    <option value="3">
-                    <option value="4">
-                    <option value="5" label="5">
-                </datalist> -->
-              </div>
+            </div>
               
               <div data-hidden-purchases class="hidden-purchases d-none">
                 ${purchaseTotalsPerDay}
@@ -156,24 +149,6 @@
 
       </div>
     </div> 
-
-      <!-- <div class="dropdown ml-5">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Presets
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <form action="/furniture" method="POST"><button class="dropdown-item">Furniture</button></form>
-            <form action="/chipotle" method="POST"><button class="dropdown-item">Chipotle</button></form>
-            <form action="/blockbuster" method="POST"><button class="dropdown-item">Blockbuster</button></form>
-    
-          </div>
-        </div> -->
-
-
-
-        <!-- <div class="container d-flex justify-content-center">
-            ${additems}
-          </div> -->
 
   <div data-show-options>
     
@@ -238,104 +213,10 @@ aria-hidden="true">
   </div>  
 </div>  
 
-  <!-- <div class="container d-flex justify-content-end">
-    <form action="/cleartable" method="POST">
-      <button type="submit" class="mb-3">Clear table</button>
-    </form>  
-  </div> -->  
 
-  <!-- <div class="table-responsive-sm">
-    <table class="table table-hover container text-center border-light">
-        <thead class="bg-secondary text-white">
-          <tr>
-            <th scope="col">Item</th>
-            <th scope="col">SKU</th>
-            <th scope="col">Lead Time</th>
-            <th scope="col">Wholesale</th>
-            <th scope="col">Retail</th>
-            <th scope="col">Original Stock</th>
-            <th scope="col">Simulated Stock</th>
-            <th scope="col">Location ID</th>
-          </tr>  
-        </thead>  
-        <tbody>
-          ${items}
-        </tbody>
-    </table> -->
+<div data-what-day class="container text-center"></div>
 
-  </div>
-
-  <div data-what-day class="container text-center"></div>
-
-  <div class="slider-container container d-flex justify-content-center mt-5">
-    <h3>Day 0</h3>
-    <input type="range" min="0" ${maxvalue} ${startvalue} list="tickmarks" class="slider" id="myRange">
-    <h3 data-max-day>${maxday}</h3>
-    <!-- <datalist id="tickmarks">
-      <option value="1" label="1">
-        <option value="2">
-        <option value="3">
-        <option value="4">
-        <option value="5" label="5">
-    </datalist> -->
-  </div>
-
-  <div data-hidden-purchases class="hidden-purchases d-none">
-    ${purchaseTotalsPerDay}
-  </div>
-
-
-  <div class="container mt-5">
-    <form action="/buy" method="POST">
-      <select name="itemSelect">
-        <option value="" disabled selected>Select item to simulate</option>
-        <option value="random" name="random">All Inventory</option>
-        ${choices}
-      </select>
-      <label id="purchased_item" class="sr-only">Simulate Purchase</label>
-      
-      <select name="numOfDays">
-        <option value="" disabled selected># of Days</option>
-        <option value="1" name="1">1</option>
-        <option value="2" name="1">2</option>
-        <option value="3" name="1">3</option>
-        <option value="4" name="1">4</option>
-        <option value="5" name="1">5</option>
-        <option value="20" name="20">20</option>
-        <option value="30" name="30">30</option>
-      </select>
-
-
-
-      <input type="number" name="customerCount" placeholder="Customers per day">
-
-      <button data-simulate type="submit">Simulate</button>
-    
-    
-    </form>
-
-    <div data-waiting>
-
-      
-    </div>
-
-  </div>
-
-    <form action="/reset" method="POST" class="float-right mr-5">
-      <button data-reset-sim type="submit">Reset Simulation</button>
-    </form>
-        </tbody>  
-    </table> -->    
-
-  <!-- </div> -->  
-
-
-</div>
-
-<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModal"
-aria-hidden="true">
-    <h1>This is modal</h1>
-</div>
+ 
 
 
 <script src="/javascripts/dashboard.js"></script>
