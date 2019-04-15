@@ -278,25 +278,29 @@ function getPurchaseRecords() {
 // pop up form for changing likelihood of purchase for an item 
 function changeBuyPercentage(e) {
 
-    console.log(e.target.textContent);
+    console.log('This is e.target.textContent: ', + e.target.textContent);
     optionsDiv.innerHTML = '';
 
     optionsDiv.innerHTML = `
-    <form action="/adjustitem" method="POST">
-        <h3>Increase purchase likelihood for ${e.target.textContent}</h3>
+        <form action="/adjustitem" method="POST">
         <input type="hidden" name="item" value="${e.target.textContent}">
         <select name="percentLikelihood">
+            <option value="" disabled selected>Increase purchase likelihood for ${e.target.textContent}</option>
             <option name="10" value="10">10%</option>
             <option name="20" value="20">20%</option>
             <option name="50" value="50">50%</option>
         </select>
-    
+        
         <button type="submit">Submit</button>
-
-    </form>
+        
+        </form>
     `
-
+    
+    
 }
 
 getPurchaseRecords();
+
+
+
 
