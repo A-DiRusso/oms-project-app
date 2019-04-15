@@ -10,13 +10,17 @@ const {
     createTable,
     createTableFurniture,
     createTableChipotle,
-    createTableBlockbuster
+    createTableBlockbuster,
+    sendPurchaseRecords,
+    adjustPurchasePercentage
 } = require('../controllers/dashboard');
 
 dashboardRouter.get('/', //ensureAuthenticated,
 showDashboard);
 
 dashboardRouter.post('/buy', simulatePurchase);
+
+dashboardRouter.get('/purchaserecords', sendPurchaseRecords);
 
 dashboardRouter.post('/reset', resetSim);
 
@@ -29,5 +33,7 @@ dashboardRouter.post('/furniture', createTableFurniture);
 dashboardRouter.post('/chipotle', createTableChipotle);
 
 dashboardRouter.post('/blockbuster', createTableBlockbuster);
+
+dashboardRouter.post('/adjustitem', adjustPurchasePercentage);
 
 module.exports = dashboardRouter;

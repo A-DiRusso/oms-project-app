@@ -9,7 +9,7 @@ const blockbuster = require('../presets/blockbuster');
 
 async function showDashboard(req, res) {
 
-    console.log(req.session);
+    console.log(req.session.itemLikelihood);
    
 
     let purchaseTotals = {};
@@ -30,17 +30,29 @@ async function showDashboard(req, res) {
       // set background color to a variable
       let bgColor = '';
       let txtColor = '';
+      let modified = '';
+      let simModified = '';
+      let itemModified = '';
       if (itemPurchaseTotal > 100) {
         bgColor = 'darker-red';
         txtColor = 'text-light';
+        modified = 'data-modified';
+        simModified = 'data-sim-modified';
+        itemModified = 'data-item-changed';
       // else if there are no purchase records for that item (nothing purchased yet)
       } else if (itemPurchaseTotal > 50 && itemPurchaseTotal <= 100) {
       
         bgColor = 'bg-danger';
+        modified = 'data-modified';
+        simModified = 'data-sim-modified';
+        itemModified = 'data-item-changed';
       
       } else if (itemPurchaseTotal > 0 && itemPurchaseTotal <= 50) {
 
-        bgColor = 'bg-warning'
+        bgColor = 'bg-warning';
+        modified = 'data-modified';
+        simModified = 'data-sim-modified';
+        itemModified = 'data-item-changed';
 
       } else if (!itemPurchaseTotal) {
         // txtColor = 'text-secondary'
@@ -49,13 +61,13 @@ async function showDashboard(req, res) {
 
       return `
       <tr>
-        <td class="border">${item.name}</td>
+        <td ${itemModified} data-item-name class="border">${item.name}</td>
         <td class="border">${item.sku}</td>
         <td class="border">${item.leadTime}</td>
         <td class="border">${item.wholesale}</td>
         <td class="border">${item.retail}</td>
-        <td data-original-stock class="border">${item.stock}</td>
-        <td data-simulated-stock class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
+        <td data-original-stock ${simModified} class="border">${item.stock}</td>
+        <td data-simulated-stock ${modified} class="border ${bgColor} ${txtColor}">${item.simulatedStock}</td>
         <td class="border">${item.location_id}</td>
       </tr>
       `
@@ -72,10 +84,6 @@ async function showDashboard(req, res) {
        let soldStockSum = 0;
        let profit = 0;
        let userName = await User.getByEmail(req.session.email);
-       console.log('$$$$$$$$$$$$$$$$')
-       console.log(req.session)
-       console.log(userName.firstName)
-       console.log('$$$$$$$$$$$$$$$$')
 
        if (req.session.sum) {
           sum = req.session.sum;
@@ -99,7 +107,6 @@ async function showDashboard(req, res) {
 
        }
 
-       console.log(purchaseTotalsHTML);
        let maxDayHTML = '';
        let maxValue = '';
        let startValue = '';
@@ -132,6 +139,50 @@ async function showDashboard(req, res) {
  
 }
 
+async function sendPurchaseRecords(req, res) {
+
+  const allPurchases = await Purchase.getAll();
+
+  const purchasesArray = [];
+
+
+  const arrayOfPromises = allPurchases.map(async purchase => {
+
+    const theItem = await Item.getById(purchase.itemID);
+
+    const purchaseObject = {};
+
+    purchaseObject['name'] = theItem.name;
+    purchaseObject['date'] = purchase.purchaseDate.toISOString().slice(0, 10);
+
+    const stringifyPurchaseObject = JSON.stringify(purchaseObject);
+
+    return stringifyPurchaseObject;
+
+  })
+
+
+  // loop through purchases
+  // allPurchases.forEach(purchase => {
+
+  //   const theItem = await Item.getById(purchase.itemID);
+
+  //   const purchaseObject = {};
+
+  //   purchaseObject['name'] = theItem.name;
+  //   purchaseObject['date'] = purchase.purchaseDate.toISOString().slice(0, 10);
+
+  //   purchasesArray.push(stringifyPurchaseObject);
+
+  // })
+
+  Promise.all(arrayOfPromises).then((data) => {
+
+    res.send(data);
+  })
+
+}
+
 async function simulatePurchase(req, res) {
 
   // 1. needs to deduct x amount of stock from whatever item was just purchased
@@ -144,10 +195,48 @@ async function simulatePurchase(req, res) {
   if (req.body.itemSelect === "random") {
     
     const allItems = await Item.getAll();
+    console.log(allItems);
     const numberOfItems = allItems.length;
+
+    let itemToIncreaseChance = '';
+    let percentageToIncrease = 0;
+
+    for (item in req.session.itemLikelihood) {
+      itemToIncreaseChance = item;
+      percentageToIncrease = req.session.itemLikelihood[item];
+    }
+
+    console.log(itemToIncreaseChance);
+    console.log(percentageToIncrease);
 
     let day = 0;
     const date = new Date();
+
+    const allOptions = [];
+
+    for (let i = 0; i < numberOfItems; i++) {
+
+      allOptions.push(i);
+    }
+    for (let i = 0; i < parseInt(percentageToIncrease); i += 10) {
+
+
+      for (let i = 0; i < allItems.length; i++) {
+  
+        console.log(allItems[i]);
+  
+        if (allItems[i].name === itemToIncreaseChance) {
+          console.log('this is running');
+          allOptions.push(i);
+  
+        }
+      }
+
+
+    }
+
+    console.log(allOptions);
+
 
     // keep loop going for each day
     while (day < numOfDays) {
@@ -157,8 +246,10 @@ async function simulatePurchase(req, res) {
 
       // while customers coming in is still less than user entered total customers per day
       while (customerCounter < req.body.customerCount) {
-        const randomItem = allItems[Math.floor(numberOfItems * Math.random())];
-        const randomItemName = randomItem.name;
+
+        const randomItem = allOptions[Math.floor(allOptions.length * Math.random())];
+        // console.log(randomItem);
+        const randomItemName = allItems[randomItem].name;
         const itemInstance = await Item.getByName(randomItemName);
         const itemID = itemInstance.id;
     
@@ -219,9 +310,6 @@ async function simulatePurchase(req, res) {
 
   // get all purchases to see which items have decreased in inventory
   const allPurchases = await Purchase.getAll();
-  console.log('$$$$$$$$$$$$$$$$$$$$$')
-  console.log(allPurchases);
-  console.log('$$$$$$$$$$$$$$$$$$$$$')
 
   // isolate just the item IDs
   const allPurchasedItems = allPurchases.map(purchase => {
@@ -249,8 +337,6 @@ async function simulatePurchase(req, res) {
 
   })
 
-  console.log(purchasesPerDate);
-
   const purchaseTotalsPerDay = {};
 
   purchasesPerDate.forEach(date => {
@@ -260,8 +346,6 @@ async function simulatePurchase(req, res) {
       purchaseTotalsPerDay[date] = 1;
     }
   })
-
-  console.log(purchaseTotalsPerDay);
 
 
 
@@ -285,6 +369,7 @@ async function resetSim(req, res) {
   req.session.sum = '';
   req.session.purchaseTotals = {};
   req.session.purchaseTotalsPerDay = '';
+  req.session.itemLikelihood = {};
 
   req.session.soldStockSum = '';
   req.session.save();
@@ -400,6 +485,20 @@ async function createTableBlockbuster(req, res) {
   res.redirect('/');
 }
 
+async function adjustPurchasePercentage(req, res) {
+  console.log('THIS IS THE REQ THIS IS WORKING');
+  console.log(req.body);
+
+  const itemLikelihood = {};
+
+  itemLikelihood[req.body.item] = req.body.percentLikelihood;
+
+  req.session.itemLikelihood = itemLikelihood;
+
+  res.redirect('/');
+
+}
+
 module.exports = {
   showDashboard,
   simulatePurchase,
@@ -408,6 +507,8 @@ module.exports = {
   createTable,
   createTableFurniture,
   createTableChipotle,
-  createTableBlockbuster
+  createTableBlockbuster,
+  sendPurchaseRecords,
+  adjustPurchasePercentage
 }
 
