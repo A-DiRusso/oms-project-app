@@ -6,23 +6,24 @@ const chipotle = require('../presets/chipotle');
 const blockbuster = require('../presets/blockbuster');
 
 
-
+// renders dashboard with relevant interpolations
 async function showDashboard(req, res) {
-
-    console.log(req.session.itemLikelihood);
    
-
+  // gets all purchase records from the session
     let purchaseTotals = {};
     
     if (req.session.purchaseTotals) {
       purchaseTotals = req.session.purchaseTotals;
     }
     
-
+    // gets all item instances
     const allItems = await Item.getAll();
 
+    // generates add items button
     let addItemsButton = '<button type="submit" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
   
+
+    // sets simulated cell styling depending on purchase totals
     const itemsList = allItems.map(item => {
 
       // get purchase total for that particular item
@@ -72,44 +73,35 @@ async function showDashboard(req, res) {
       </tr>
       `
        });
-       const allItemsNoSpaces = allItems.map(item => item.name.replace(/ /g, '-'));
 
-       const itemChoices = allItemsNoSpaces.map(item => {
-         return `
-          <option name=${item} value=${item}>${item.replace(/-/g, ' ')}</option>
+    const allItemsNoSpaces = allItems.map(item => item.name.replace(/ /g, '-'));
 
-         `
-       });
-       let sum = 0;
-       let soldStockSum = 0;
-       let profit = 0;
-       let userName = await User.getByEmail(req.session.email);
+    // puts item choices in the select item to simulate dropdown 
+    const itemChoices = allItemsNoSpaces.map(item => {
+      return `
+      <option name=${item} value=${item}>${item.replace(/-/g, ' ')}</option>
 
-       if (req.session.sum) {
-          sum = req.session.sum;
-          soldStockSum = req.session.soldStockSum;
-          profit = ("$" + (parseFloat(req.session.sum.substring(1).replace(',', '')) - parseFloat(req.session.soldStockSum.substring(1).replace(',', ''))).toFixed(2).replace( /\d{1,3}(?=(\d{3})+(?!\d))/g , "$&,"));
-       } else {
-          soldStockSum = '';
-          sum = '';
-          profit = '';
-       }
+      `
+    });
 
-       
-       const purchaseTotalsHTML = [];
-       if (req.session.purchaseTotalsPerDay) {
+    let sum = 0;
+    let soldStockSum = 0;
+    let profit = 0;
+    let userName = await User.getByEmail(req.session.email);
 
-         const purchaseTotalsPerDay = req.session.purchaseTotalsPerDay;
-         for (let date in purchaseTotalsPerDay) {
-          const purchaseInfo = `<h3>${date}: ${purchaseTotalsPerDay[date]}</h3>`
-          purchaseTotalsHTML.push(purchaseInfo);
-         }
+    if (req.session.sum) {
+      sum = req.session.sum;
+      soldStockSum = req.session.soldStockSum;
+      profit = ("$" + (parseFloat(req.session.sum.substring(1).replace(',', '')) - parseFloat(req.session.soldStockSum.substring(1).replace(',', ''))).toFixed(2).replace( /\d{1,3}(?=(\d{3})+(?!\d))/g , "$&,"));
+    } else {
+      soldStockSum = '';
+      sum = '';
+      profit = '';
+    }
 
-       }
-
-       let maxDayHTML = '';
-       let maxValue = '';
-       let startValue = '';
+    let maxDayHTML = '';
+    let maxValue = '';
+    let startValue = '';
 
        if (req.session.purchaseTotalsPerDay) {
         maxDayHTML = `Day ${Object.keys(req.session.purchaseTotalsPerDay).length}`;
@@ -126,26 +118,22 @@ async function showDashboard(req, res) {
              revenueTotal: sum,
              soldStockTotalCost: soldStockSum,
              profit: profit,
-             purchaseTotalsPerDay: purchaseTotalsHTML.join(''),
+             purchaseTotalsPerDay: '',
              name: userName,
              maxday: maxDayHTML,
              maxvalue: `max=${maxValue}`,
              startvalue: `value=${startValue}`
           }
         });
-      // } else {
-      //   res.redirect('/login');
-      // }
- 
 }
 
+// sends purchase records to be put in local storage on the front end
 async function sendPurchaseRecords(req, res) {
 
+  // gets all purchase records from database
   const allPurchases = await Purchase.getAll();
 
-  const purchasesArray = [];
-
-
+  // creates array of promises with the item name and date for each purchase record
   const arrayOfPromises = allPurchases.map(async purchase => {
 
     const theItem = await Item.getById(purchase.itemID);
@@ -155,27 +143,14 @@ async function sendPurchaseRecords(req, res) {
     purchaseObject['name'] = theItem.name;
     purchaseObject['date'] = purchase.purchaseDate.toISOString().slice(0, 10);
 
+    // stringify for local storage
     const stringifyPurchaseObject = JSON.stringify(purchaseObject);
 
     return stringifyPurchaseObject;
 
   })
 
-
-  // loop through purchases
-  // allPurchases.forEach(purchase => {
-
-  //   const theItem = await Item.getById(purchase.itemID);
-
-  //   const purchaseObject = {};
-
-  //   purchaseObject['name'] = theItem.name;
-  //   purchaseObject['date'] = purchase.purchaseDate.toISOString().slice(0, 10);
-
-  //   purchasesArray.push(stringifyPurchaseObject);
-
-  // })
-
+  // fulfill all promises, then send the formatted purchase records
   Promise.all(arrayOfPromises).then((data) => {
 
     res.send(data);
@@ -183,21 +158,27 @@ async function sendPurchaseRecords(req, res) {
 
 }
 
+// simulates purchases, for all inventory and single item
 async function simulatePurchase(req, res) {
 
   // 1. needs to deduct x amount of stock from whatever item was just purchased
 
   // number of days to simulate, as entered by user
   const numOfDays = req.body.numOfDays;
-  
+
+  // item to simulate, as selected by user from select item to simulate dropdown
   const itemName = req.body.itemSelect.replace(/-/g, ' ');
 
+  // if user has chosen random simulation
   if (req.body.itemSelect === "random") {
     
+    // get all item instances from database
     const allItems = await Item.getAll();
-    console.log(allItems);
+
+    // gets total number of items to simulate
     const numberOfItems = allItems.length;
 
+    // checks to see if there are any items with increased likelihood of purchase
     let itemToIncreaseChance = '';
     let percentageToIncrease = 0;
 
@@ -206,41 +187,34 @@ async function simulatePurchase(req, res) {
       percentageToIncrease = req.session.itemLikelihood[item];
     }
 
-    console.log(itemToIncreaseChance);
-    console.log(percentageToIncrease);
-
     let day = 0;
     const date = new Date();
 
     const allOptions = [];
 
     for (let i = 0; i < numberOfItems; i++) {
-
+      // converts all item options to numbers
       allOptions.push(i);
     }
+
+    // if item has increased likelihood to purchase, push that item to all options array x number of days
     for (let i = 0; i < parseInt(percentageToIncrease); i += 10) {
 
 
       for (let i = 0; i < allItems.length; i++) {
-  
-        console.log(allItems[i]);
-  
+        
         if (allItems[i].name === itemToIncreaseChance) {
-          console.log('this is running');
           allOptions.push(i);
-  
         }
       }
 
 
     }
 
-    console.log(allOptions);
-
+    // ---------------------- RANDOM PURCHASE SIMULATION -----------------------
 
     // keep loop going for each day
     while (day < numOfDays) {
-
 
       let customerCounter = 0;
 
@@ -256,27 +230,31 @@ async function simulatePurchase(req, res) {
         await Item.adjustStock(-1, itemID);
         
         // converts to UTC (London time)
+        // create record of purchase in purchase's table
         await Purchase.newPurchase(itemID, 2, 1, date.toISOString().slice(0, 10));
         // increment customer counter
         customerCounter++;
         // increment date
         
       }
-      
+      // increment to next date
       date.setDate(date.getDate() + 1);
       day++;
 
     }
-    //find length of allItmes array - getAllItems
-    //run while loop replacing itemid with random less than allItemsArray.length
+
+    // ---------------------- END RANDOM PURCHASE SIMULATION -----------------------
+
 
   } else  {
 
-    //specific/normal operation 
     const itemInstance = await Item.getByName(itemName);
 
     let day = 0;
     const date = new Date();
+
+    // ---------------------- SINGLE ITEM PURCHASE SIMULATION -----------------------
+
 
     // keep loop going for each day
     while (day < numOfDays) {
@@ -302,7 +280,12 @@ async function simulatePurchase(req, res) {
       day++;
 
     }
+
+    // ---------------------- END SINGLE ITEM PURCHASE SIMULATION -----------------------
   }
+
+
+  // --------- SAVE PURCHASE TOTALS IN LOCAL STORAGE -----------------
 
   // retrieve sum of revenues for the day
   let sum = await Purchase.totalRevenue();
@@ -363,8 +346,10 @@ async function simulatePurchase(req, res) {
   })
 }
 
+// resets table back to present day default stock levels
 async function resetSim(req, res) {
 
+  // delete all purchase records and clear relevant purchase/item sessions
   await Purchase.deleteAll();
   req.session.sum = '';
   req.session.purchaseTotals = {};
@@ -379,9 +364,10 @@ async function resetSim(req, res) {
 
   // each of the items in allItems needs to call resetStock
   const arrayOfPromises = allItems.map(async item => {
+    // call reset stock on each item
     return await item.resetStock()
   })
-
+  // fulfill all promises then redirect to dashboard
   Promise.all(arrayOfPromises).then(values => {
     
     res.redirect('/');
@@ -389,16 +375,19 @@ async function resetSim(req, res) {
   })
 }
 
-
+// clears table of items and simulations run
 async function clearTable(req, res) {
+  // clear table needs to reset simulation, which wipes sessions clean
   resetSim(req, res);
-  // needs to wipe clean all data that is in the items table
+
+  // also needs to wipe clean all data that is in the items table
   await Purchase.deleteAll();
   await Item.deleteAll();
 
   res.redirect('/');
 }
 
+// creates table based on user inputs in add items modal
 async function createTable(req, res) {
   // needs to add each item entered in the form to sql table items
   // all form input is stored in req.body object
@@ -432,13 +421,11 @@ async function createTable(req, res) {
 
   }
 
-  // const itemObject = req.body;
-  // await Item.addItem(itemObject);
-
   // redirect to dashboard
   res.redirect('/');
 }
 
+// preset table
 async function createTableFurniture(req, res) {
   await Purchase.deleteAll();
   await Item.deleteAll();
@@ -457,6 +444,7 @@ async function createTableFurniture(req, res) {
 
 }
 
+// preset table
 async function createTableChipotle(req, res) {
   await Purchase.deleteAll();
   await Item.deleteAll();
@@ -471,6 +459,7 @@ async function createTableChipotle(req, res) {
   res.redirect('/');
 }
 
+// preset table
 async function createTableBlockbuster(req, res) {
   await Purchase.deleteAll();
   await Item.deleteAll();
@@ -485,9 +474,8 @@ async function createTableBlockbuster(req, res) {
   res.redirect('/');
 }
 
+// stores increased purchase likelihood for an item in sessions
 async function adjustPurchasePercentage(req, res) {
-  console.log('THIS IS THE REQ THIS IS WORKING');
-  console.log(req.body);
 
   const itemLikelihood = {};
 

@@ -37,3 +37,4 @@ dashboardRouter.post('/blockbuster', createTableBlockbuster);
 dashboardRouter.post('/adjustitem', adjustPurchasePercentage);
 
 module.exports = dashboardRouter;
+
