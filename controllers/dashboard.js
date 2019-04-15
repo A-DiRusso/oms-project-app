@@ -21,7 +21,7 @@ async function showDashboard(req, res) {
 
     const allItems = await Item.getAll();
 
-    let addItemsButton = '<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
+    let addItemsButton = '<button type="submit" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
   
     const itemsList = allItems.map(item => {
 
@@ -391,6 +391,7 @@ async function resetSim(req, res) {
 
 
 async function clearTable(req, res) {
+  resetSim(req, res);
   // needs to wipe clean all data that is in the items table
   await Purchase.deleteAll();
   await Item.deleteAll();
@@ -439,6 +440,8 @@ async function createTable(req, res) {
 }
 
 async function createTableFurniture(req, res) {
+  await Purchase.deleteAll();
+  await Item.deleteAll();
 
   // create a bunch of preset objects for furniture;
   const furnitureArray = furniture();
@@ -455,6 +458,8 @@ async function createTableFurniture(req, res) {
 }
 
 async function createTableChipotle(req, res) {
+  await Purchase.deleteAll();
+  await Item.deleteAll();
 
   const chipotleArray = chipotle();
 
@@ -467,6 +472,8 @@ async function createTableChipotle(req, res) {
 }
 
 async function createTableBlockbuster(req, res) {
+  await Purchase.deleteAll();
+  await Item.deleteAll();
 
   const blockbusterArray = blockbuster();
 
