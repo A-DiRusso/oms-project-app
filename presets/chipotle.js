@@ -9,7 +9,7 @@ function chipotleItems() {
         leadtime: 2,
         wholesale: .30,
         retail: 1.00,
-        stock: 1000,
+        stock: 15000,
         locationid: 1
 
     }
@@ -20,7 +20,7 @@ function chipotleItems() {
         leadtime: 1,
         wholesale: .25,
         retail: 1.20,
-        stock: 500,
+        stock: 25000,
         locationid: 1
 
     }
@@ -31,7 +31,7 @@ function chipotleItems() {
         leadtime: 3,
         wholesale: 2.00,
         retail: 3.00,
-        stock: 400,
+        stock: 14030,
         locationid: 1
 
     }
@@ -42,7 +42,7 @@ function chipotleItems() {
         leadtime: 3,
         wholesale: .50,
         retail: 1.00,
-        stock: 500,
+        stock: 15100,
         locationid: 1
 
     }
@@ -54,7 +54,7 @@ function chipotleItems() {
         leadtime: 2,
         wholesale: .45,
         retail: .65,
-        stock: 300,
+        stock: 9010,
         locationid: 1
 
     }
@@ -65,7 +65,7 @@ function chipotleItems() {
         leadtime: 2,
         wholesale: 1.20,
         retail: 1.30,
-        stock: 124,
+        stock: 14124,
         locationid: 1
 
     }
@@ -76,7 +76,7 @@ function chipotleItems() {
         leadtime: 10,
         wholesale: 4.50,
         retail: 5.50,
-        stock: 98,
+        stock: 13498,
         locationid: 1
 
     }
@@ -88,7 +88,7 @@ function chipotleItems() {
         leadtime: 3,
         wholesale: .35,
         retail: .75,
-        stock: 80,
+        stock: 18907,
         locationid: 1
 
     }

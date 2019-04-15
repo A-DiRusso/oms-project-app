@@ -9,7 +9,7 @@ function furnitureItems() {
         leadtime: 7,
         wholesale: 25.00,
         retail: 35.00,
-        stock: 50,
+        stock: 500,
         locationid: 1
 
     }
@@ -20,7 +20,7 @@ function furnitureItems() {
         leadtime: 3,
         wholesale: 100.00,
         retail: 145.00,
-        stock: 25,
+        stock: 253,
         locationid: 1
 
     }
@@ -31,7 +31,7 @@ function furnitureItems() {
         leadtime: 1,
         wholesale: 75.00,
         retail: 125.00,
-        stock: 26,
+        stock: 426,
         locationid: 1
 
     }
@@ -42,7 +42,7 @@ function furnitureItems() {
         leadtime: 4,
         wholesale: 54.50,
         retail: 76.99,
-        stock: 34,
+        stock: 734,
         locationid: 1
 
     }
@@ -54,7 +54,7 @@ function furnitureItems() {
         leadtime: 3,
         wholesale: 76.45,
         retail: 95.99,
-        stock: 40,
+        stock: 1490,
         locationid: 1
 
     }
@@ -65,7 +65,7 @@ function furnitureItems() {
         leadtime: 7,
         wholesale: 450.00,
         retail: 567.99,
-        stock: 20,
+        stock: 200,
         locationid: 1
 
     }
@@ -76,7 +76,7 @@ function furnitureItems() {
         leadtime: 10,
         wholesale: 100.00,
         retail: 150.45,
-        stock: 78,
+        stock: 278,
         locationid: 1
 
     }
@@ -88,7 +88,7 @@ function furnitureItems() {
         leadtime: 20,
         wholesale: 350.00,
         retail: 400.45,
-        stock: 80,
+        stock: 180,
         locationid: 1
 
     }
