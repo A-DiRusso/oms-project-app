@@ -71,16 +71,16 @@ The Order Management System is inspired by real world implementations like Shopi
 
 #### Challenges
 - Challenge #1: Constructing a database architecture using PostgreSQL that we could then build functionality around.
-  -Solution: Organized data into 5 tables (users, customers, items, locations, purchases) that represents the real world information.
+  - Solution: Organized data into 5 tables (users, customers, items, locations, purchases) that represents the real world information.
   
 - Challenge #2: Allowing the user to securely add a single item and visualize it on the dashboard
-  -Solution: Using forms, looked for post requests that allowed the user to dynamically manipulate tables in the database. This involved creation of the proper routes, controllers, and models in traditional MVC fashion.
+  - Solution: Using forms, looked for post requests that allowed the user to dynamically manipulate tables in the database. This involved creation of the proper routes, controllers, and models in traditional MVC fashion.
   
 - Challenge #3: Allowing the user to visualize inventory outflows of the items they want to test, using a selected number of days and customers.
-  -Solution: Scaled existing functions to work for user entered data and added new functionality that allows the tables to scale appropriately
+  - Solution: Scaled existing functions to work for user entered data and added new functionality that allows the tables to scale appropriately
 
 - Challenge #4: Showing the user how their inventory would change incrementally over time without refreshing the entire page for each increment
-  -Solution: Used client-side JavaScript once the database was changed to visualize the day-to-day changes, without having to query the database again.
+  - Solution: Used client-side JavaScript once the database was changed to visualize the day-to-day changes, without having to query the database again.
 
 - Challenge #5: Understand and implement GitHub OAuth for user login. 
   - Solution: Have OAuth work beside standard login procedures without interferance or overlap.
