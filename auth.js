@@ -13,7 +13,7 @@ const setupAuth = (app) => {
   passport.use(new GithubStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/github/auth"
+    callbackURL: "http://localhost:3100/github/auth"
   }, async (accessToken, refreshToken, profile, done) => {
     
     console.log("-------------------------------")
@@ -75,7 +75,7 @@ const setupAuth = (app) => {
   app.use(passport.session());
 
   // #8 register our login, logout, and auth routes
-  app.get('/login/github/auth', passport.authenticate('github'));
+  app.get('/github/auth', passport.authenticate('github'));
 
 
   app.get('/logout', function(req, res, next) {
@@ -97,6 +97,7 @@ const setupAuth = (app) => {
 
       console.log('you just logged in');
       console.log(req.isAuthenticated());
+
       req.session.save(() => {
         // make sure the session is saved
         // before we send them to the homepage!

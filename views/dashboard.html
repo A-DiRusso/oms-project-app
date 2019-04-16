@@ -102,7 +102,7 @@
             <div class="container d-flex flex-wrap flex-md-nowrap align-items-center justify-content-around pt-2">
                 
                     <form action="/buy" method="POST" class="">
-                      <div class="btn-toolbar d-flex mb-2 mb-md-0">
+                      <div class="btn-toolbar d-flex mb-2 mb-md-0 justify-content-around">
                           <div class="btn-group align-items-center">
                             <select class="btn btn-sm btn-outline-secondary" name="itemSelect">
                               <option value="" disabled selected>Select item to simulate</option>
@@ -124,7 +124,7 @@
                             </select>
                             
                           </div>
-                          <div class="btn-group ml-3 mr-3 align-items-center">
+                          <div class="btn-group">
                             <input class="btn btn-sm btn-outline-secondary" type="number" name="customerCount" placeholder="Customers per day">
                           </div>
 
@@ -135,9 +135,9 @@
                         </div>
                       </form>
 
-                      <div class="border-right" style="height: 30px"></div>
+                      <div class="d-none d-lg-block border-right" style="height: 30px"></div>
                       
-                      <form action="/reset" method="POST" class="d-flex">
+                      <form action="/reset" method="POST">
                         <button type="submit" class="btn btn-outline-secondary">Reset Simulation</button>
                       </form>
                     </div>
