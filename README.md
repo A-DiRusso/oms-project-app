@@ -56,7 +56,7 @@ The Order Management System is inspired by real world implementations like Shopi
 ![alt-text](https://raw.githubusercontent.com/A-DiRusso/oms-project-app/master/images/day-3-random-sim.png)
 
 ## Day to day slider simulation visualization
-<iframe src="https://giant.gfycat.com/IllinformedPoshHarpyeagle.gif" title="Slider Demo" style="width:1000;"/></iframe>
+<img src="https://giant.gfycat.com/IllinformedPoshHarpyeagle.gif" title="Slider Demo" width="1000"/></img>
 
 
 #### Technologies
