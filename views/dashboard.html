@@ -15,14 +15,16 @@
 </head>
 
 <body>
+  <!-- Nav -->
     <nav class="navbar navbar-dark fixed-top bg-dark flex-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Welcome, ${userName}</a>
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Welcome, ${(userName) ? userName : passUserName}</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-              <a class="nav-link" href="/login">Sign out</a>
+              <a class="nav-link" href="/logout">Sign out</a>
             </li>
           </ul>
     </nav>
+    
     <div class="container-fluid">
       <div class="row">
         <main role="main" class="col-sm-12 col-md-12 m-sm-auto col-lg-12 px-4 pt-5">
@@ -149,7 +151,7 @@
 
 
             
-            
+            <!-- slider -->
             <div class="slider-container container d-flex justify-content-center mt-1">
                 <h3>Day 0</h3>
                 <input type="range" min="0" ${maxvalue} ${startvalue} list="tickmarks" class="slider" id="myRange">
@@ -160,14 +162,14 @@
                 ${purchaseTotalsPerDay}
               </div>
 
-                <div data-waiting>
+                <div data-waiting class="container">
               
                   
                 </div>
               
               </div>
               
-              
+              <!-- simulated data display -->
             <div class="container pb-5 pt-2">
               <h4 class="simulated-data">Projected Cash Flow</h4>
               <h6 class="simulated-data">Revenue: ${revenueTotal}</h6>

@@ -49,7 +49,8 @@ const setupAuth = (app) => {
     //     "user": "1090173"
     //   }
     // }
-    done(null, user.id);
+    done(null, user);
+
 
     // Meaning, you can identify the user via:
     // req.session.passport.user
@@ -75,7 +76,7 @@ const setupAuth = (app) => {
   app.use(passport.session());
 
   // #8 register our login, logout, and auth routes
-  app.get('/github/auth', passport.authenticate('github'));
+  // app.get('/github/auth', passport.authenticate('github'));
 
 
   app.get('/logout', function(req, res, next) {
@@ -97,6 +98,9 @@ const setupAuth = (app) => {
 
       console.log('you just logged in');
       console.log(req.isAuthenticated());
+      console.log(req.session);
+      req.session.email = req.session.passport.user.username;
+      req.session.displayName = req.session.passport.user.displayName;
 
       req.session.save(() => {
         // make sure the session is saved
