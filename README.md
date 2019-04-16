@@ -67,6 +67,7 @@ The Order Management System is inspired by real world implementations like Shopi
 - AWS
 - Nginx
 - Passport
+- OAuth
 
 #### Challenges
 - Challenge #1: Constructing a database architecture using PostgreSQL that we could then build functionality around.
@@ -80,6 +81,9 @@ The Order Management System is inspired by real world implementations like Shopi
 
 - Challenge #4: Showing the user how their inventory would change incrementally over time without refreshing the entire page for each increment
   -Solution: Used client-side JavaScript once the database was changed to visualize the day-to-day changes, without having to query the database again.
+
+- Challenge #5: Understand and implement GitHub OAuth for user login. 
+  - Solution: Have OAuth work beside standard login procedures without interferance or overlap.
   
 
 #### MVP
