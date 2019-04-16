@@ -5,6 +5,7 @@
 ### Table of contents
 * Description
 * Features
+* Screenshots
 * Technologies
 * Challenges
 * MVP
