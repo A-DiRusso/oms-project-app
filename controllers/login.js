@@ -1,4 +1,5 @@
 const User = require('../models/users');
+const Passport = require('../auth');
 
 function showLoginPage (req, res) {
     req.session.destroy(() => {
@@ -25,7 +26,7 @@ async function verifyUser(req, res) {
     // res.send('this is working');
 
     //if the user not found, redirect to the signup page
-    if (theUser.password) {
+    if (theUser.password || Passport.req.isAuthenticated()) {
         req.session.save(() => {
             res.redirect('/');
         })
