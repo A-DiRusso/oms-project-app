@@ -110,10 +110,14 @@ async function showDashboard(req, res) {
        }
 
        if (req.session.email) {
+         console.log("----------------")
+         console.log(req.session);
+         console.log("----------------")
 
          res.render('dashboard', {
            locals: {
               userName: userName.firstName,
+              passUserName: req.session.displayName,
               additems: addItemsButton,
               items: itemsList.join(''),
               choices: itemChoices.join(''),

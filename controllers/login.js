@@ -2,14 +2,22 @@ const User = require('../models/users');
 const Passport = require('../auth');
 
 function showLoginPage (req, res) {
-    req.session.destroy(() => {
-        res.render('login',{
-            locals:{
-                email:'',
-                message:''
-                
-        }});
-    });
+
+    if(req.isAuthenticated()) {
+        console.log("is Authenticated")
+            res.redirect('/');
+
+    } else {
+        console.log("nah")
+        req.session.destroy(() => {
+            res.render('login',{
+                locals:{
+                    email:'',
+                    message:''
+                    
+            }});
+        });
+    }
 
 }
 
@@ -26,7 +34,7 @@ async function verifyUser(req, res) {
     // res.send('this is working');
 
     //if the user not found, redirect to the signup page
-    if (theUser.password || Passport.req.isAuthenticated()) {
+    if (theUser.password) {
         req.session.save(() => {
             res.redirect('/');
         })
