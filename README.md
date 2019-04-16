@@ -73,7 +73,7 @@ The Order Management System is inspired by real world implementations like Shopi
 - Challenge #1: Constructing a database architecture using PostgreSQL that we could then build functionality around.
   -Solution: Organized data into 5 tables (users, customers, items, locations, purchases) that represents the real world information.
   
--Challenge #2: Allowing the user to securely add a single item and visualize it on the dashboard
+- Challenge #2: Allowing the user to securely add a single item and visualize it on the dashboard
   -Solution: Using forms, looked for post requests that allowed the user to dynamically manipulate tables in the database. This involved creation of the proper routes, controllers, and models in traditional MVC fashion.
   
 - Challenge #3: Allowing the user to visualize inventory outflows of the items they want to test, using a selected number of days and customers.
