@@ -98,10 +98,11 @@ class Item {
         })
     }
 
-    static deleteAll() {
+    static deleteAll(userid) {
         // delete all items from items table
         return db.result(`
         DELETE from items
+        WHERE user_id=${userid}
         `)
     }
 

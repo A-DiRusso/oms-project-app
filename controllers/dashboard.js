@@ -194,7 +194,7 @@ async function simulatePurchase(req, res) {
   if (req.body.itemSelect === "random") {
     
     // get all item instances from database
-    const allItems = await Item.getAll();
+    const allItems = await Item.getAllByUser(req.session.userid);
 
     // gets total number of items to simulate
     const numberOfItems = allItems.length;
@@ -381,7 +381,7 @@ async function resetSim(req, res) {
   req.session.save();
 
   // needs to update numbers in simulated stock column to match original stock
-  const allItems = await Item.getAll();
+  const allItems = await Item.getAllByUser(req.session.userid);
   
 
   // each of the items in allItems needs to call resetStock
@@ -409,7 +409,7 @@ async function clearTable(req, res) {
 
   // also needs to wipe clean all data that is in the items table
   await Purchase.deleteAll();
-  await Item.deleteAll();
+  await Item.deleteAll(req.session.userid);
 
   res.redirect('/');
 }
@@ -458,7 +458,7 @@ async function createTable(req, res) {
 // preset table
 async function createTableFurniture(req, res) {
   await Purchase.deleteAll();
-  await Item.deleteAll();
+  await Item.deleteAll(req.session.userid);
 
   // create a bunch of preset objects for furniture;
   const furnitureArray = furniture();
@@ -479,7 +479,7 @@ async function createTableFurniture(req, res) {
 // preset table
 async function createTableChipotle(req, res) {
   await Purchase.deleteAll();
-  await Item.deleteAll();
+  await Item.deleteAll(req.session.userid);
 
   const chipotleArray = chipotle();
 
@@ -495,7 +495,7 @@ async function createTableChipotle(req, res) {
 // preset table
 async function createTableBlockbuster(req, res) {
   await Purchase.deleteAll();
-  await Item.deleteAll();
+  await Item.deleteAll(req.session.userid);
 
   const blockbusterArray = blockbuster();
 
