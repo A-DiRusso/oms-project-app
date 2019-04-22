@@ -34,9 +34,10 @@ class Item {
         });
     }
 
-    static getAll() {
+    static getAllByUser(userid) {
         return db.any(`
             select * from items
+            WHERE user_id=${userid}
             order by name;
         `)
         .then(itemsData => {
@@ -107,10 +108,10 @@ class Item {
     static addItem(itemObject) {
         // needs to add all items entered in form to items table
         return db.result(`
-        INSERT INTO items (name, sku, lead_time, wholesale, retail, stock, simulated_stock, location_id) 
-        values ($1, $2, $3, $4, $5, $6, $7, $8)
+        INSERT INTO items (name, sku, lead_time, wholesale, retail, stock, simulated_stock, location_id, user_id) 
+        values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         
-        `, [itemObject.itemname, itemObject.sku, itemObject.leadtime, itemObject.wholesale, itemObject.retail, itemObject.stock, itemObject.stock, itemObject.locationid]);
+        `, [itemObject.itemname, itemObject.sku, itemObject.leadtime, itemObject.wholesale, itemObject.retail, itemObject.stock, itemObject.stock, itemObject.locationid, itemObject.userid]);
     }
 
 }

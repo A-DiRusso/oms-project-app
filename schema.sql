@@ -27,7 +27,8 @@ create table items (
     retail money,
     stock integer,
     simulated_stock integer,
-    location_id integer references locations(id)
+    location_id integer references locations(id),
+    user_id integer
 );
 
 create table purchases (

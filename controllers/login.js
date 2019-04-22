@@ -33,6 +33,8 @@ async function verifyUser(req, res) {
     // console.log('this is theUser:', theUser);
     // res.send('this is working');
 
+    req.session.userid = theUser.id;
+
     //if the user not found, redirect to the signup page
     if (theUser.password) {
         req.session.save(() => {

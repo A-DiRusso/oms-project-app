@@ -17,7 +17,16 @@ async function showDashboard(req, res) {
     }
     
     // gets all item instances
-    const allItems = await Item.getAll();
+    const allItems = await Item.getAllByUser(req.session.userid);
+
+    let simulateView = 'class="d-none"';
+    let tableMessage = 'Add items or select a preset table to get started'
+
+    if (allItems.length) {
+
+      simulateView = 'class="d-block"';
+      tableMessage = '';
+    }
 
     // generates add items button
     let addItemsButton = '<button type="submit" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addItemsModal">Add Items</button>';
@@ -128,7 +137,9 @@ async function showDashboard(req, res) {
               name: userName,
               maxday: maxDayHTML,
               maxvalue: `max=${maxValue}`,
-              startvalue: `value=${startValue}`
+              startvalue: `value=${startValue}`,
+              simulateView: simulateView,
+              tablemessage: tableMessage
            }
          });
 
@@ -411,8 +422,10 @@ async function createTable(req, res) {
 
   // if there is only one item being added
   if (typeof req.body.itemname === 'string') {
-
+    console.log(req.body);
     const itemObject = req.body;
+    itemObject.userid = `${req.session.userid}`;
+    console.log(itemObject);
     await Item.addItem(itemObject);
 
   } else {
@@ -429,6 +442,7 @@ async function createTable(req, res) {
       itemObject.retail = req.body.retail[i];
       itemObject.stock = req.body.stock[i];
       itemObject.locationid = req.body.locationid[i];
+      itemObject.userid = req.session.userid;
   
   
       await Item.addItem(itemObject);
@@ -451,6 +465,8 @@ async function createTableFurniture(req, res) {
 
   for (let i = 0; i < furnitureArray.length; i++) {
 
+    furnitureArray[i].userid = req.session.userid;
+
     await Item.addItem(furnitureArray[i]);
 
   }
@@ -469,6 +485,7 @@ async function createTableChipotle(req, res) {
 
   for (let i = 0; i < chipotleArray.length; i++) {
 
+    chipotleArray[i].userid = req.session.userid;
     await Item.addItem(chipotleArray[i]);
 
   }
@@ -484,6 +501,7 @@ async function createTableBlockbuster(req, res) {
 
   for (let i = 0; i < blockbusterArray.length; i++) {
 
+    blockbusterArray[i].userid = req.session.userid;
     await Item.addItem(blockbusterArray[i]);
 
   }
