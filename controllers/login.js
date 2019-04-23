@@ -35,13 +35,13 @@ async function verifyUser(req, res) {
 
     req.session.userid = theUser.id;
 
-    //if the user not found, redirect to the signup page
     if (theUser.password) {
         req.session.save(() => {
             res.redirect('/');
         })
         
     } else {
+        //if the user not found, redirect to the signup page
         res.render('login', {
             locals: {
                 message:'User name or password is incorrect.',

@@ -245,7 +245,7 @@ async function simulatePurchase(req, res) {
         const randomItem = allOptions[Math.floor(allOptions.length * Math.random())];
         // console.log(randomItem);
         const randomItemName = allItems[randomItem].name;
-        const itemInstance = await Item.getByName(randomItemName);
+        const itemInstance = await Item.getByName(randomItemName, req.session.userid);
         const itemID = itemInstance.id;
     
         await Item.adjustStock(-1, itemID);
@@ -269,7 +269,7 @@ async function simulatePurchase(req, res) {
 
   } else  {
 
-    const itemInstance = await Item.getByName(itemName);
+    const itemInstance = await Item.getByName(itemName, req.session.userid);
 
     let day = 0;
     const date = new Date();

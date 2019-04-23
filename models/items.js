@@ -77,10 +77,10 @@ class Item {
         `)
     }
 
-    static getByName(name) {
+    static getByName(name, userID) {
         return db.one(`
         Select * from items
-        where name ilike '${name}'
+        where name ilike '${name}' and user_id=${userID}
         `)
         .then(item => {
             const itemInstance = new Item(item.id,
@@ -91,7 +91,8 @@ class Item {
                 item.retail,
                 item.stock,
                 item.simulated_stock,
-                item.location_id
+                item.location_id,
+                item.user_id
 
             )
             return itemInstance;

@@ -20,10 +20,5 @@ VALUES
 ('Los Angles, CA')
 ;
 
--- insert into items
--- (name, sku, lead_time, wholesale, retail, stock, simulated_stock, location_id)
--- VALUES
--- ('example', 'abc123', '21', 150.00, 250.00, 500, 500, 1)
--- ;
 
 
