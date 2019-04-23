@@ -425,6 +425,7 @@ async function createTable(req, res) {
     console.log(req.body);
     const itemObject = req.body;
     itemObject.userid = `${req.session.userid}`;
+    itemObject.locationid = '1';
     console.log(itemObject);
     await Item.addItem(itemObject);
 
@@ -441,7 +442,7 @@ async function createTable(req, res) {
       itemObject.wholesale = req.body.wholesale[i];
       itemObject.retail = req.body.retail[i];
       itemObject.stock = req.body.stock[i];
-      itemObject.locationid = req.body.locationid[i];
+      itemObject.locationid = '1';
       itemObject.userid = req.session.userid;
   
   
